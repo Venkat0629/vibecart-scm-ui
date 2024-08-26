@@ -1,0 +1,14 @@
+.footer-container {
+    background-color: black;
+    color:#CCCCCC;
+    text-align: center;
+    font-size: 14px;
+    margin-top: auto;
+    border-top: 1px solid #e0e0e0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }

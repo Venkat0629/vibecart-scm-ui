@@ -1,0 +1,27 @@
+.sidebar-btn {
+    width: 100%;
+    text-align: left;
+    padding: 10px 15px;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.sidebar .btn-link {
+    padding-left: 25px;
+    text-decoration: none;
+}
+
+.sidebar .btn-outline-secondary {
+    border-radius: 0;
+}
+
+.sidebar .btn-outline-secondary:hover,
+.sidebar .btn-outline-secondary:focus {
+    /* background-color: #e9ecef; */
+    border-color: #ced4da;
+}
+
+.sidebar .btn-outline-secondary.active {
+    background-color: #ced4da;
+    border-color: #adb5bd;
+}

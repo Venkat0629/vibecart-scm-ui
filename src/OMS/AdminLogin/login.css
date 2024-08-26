@@ -1,0 +1,43 @@
+.container {
+  /* background-color: #f8f9fa; */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 80px;
+}
+
+.login-box {
+  max-width: 400px;
+  width: 100%;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  padding: 20px;
+}
+
+.login-box h2 {
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.login-box .form-control, 
+.login-box .form-select {
+  border-radius: 0;
+  border: 1px solid #ced4da;
+  /* background-color: #f0f0f0 ; */
+}
+.form-control::placeholder {
+  color: #6c757d;
+  opacity: 1; 
+}
+.login-box button {
+  border-radius: 0;
+  background-color: #0056b3;
+  border: 1px solid #6c757d;
+  width: 100%;
+}
+
+.login-box button:hover {
+  background-color: #0069d9;
+  border: 1px solid #545b62;
+}

@@ -1,0 +1,44 @@
+.header-container {
+    background-color: black ;
+    color: white;
+}
+
+.header-title {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.header-subtitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #f8f9fa;
+}
+
+.user-info .user-icon {
+    font-size: 24px;
+    color: #f8f9fa;
+}
+
+.user-info .user-name {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #f8f9fa; 
+}
+
+.logout-button {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.logout-icon {
+    margin-right: 0.5rem;
+    font-size: 1.25rem;
+}
+.shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
