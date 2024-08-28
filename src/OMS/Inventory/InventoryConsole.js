@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Button, Table } from 'react-bootstrap';
-import './Styling/inv_console.css'; 
-import Sidebar from './sidebar';
+import { Container, Row, Col, Button, Table, InputGroup, FormControl } from 'react-bootstrap';
+import './Styling/inv_console.css';
 
 const InventoryConsole = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [hoverData, setHoverData] = useState(null);
+  const [filteredData, setFilteredData] = useState([]);
 
   const inventoryData = [
     { skuId: '34567', productId: '23', productName: 'Sporty Runner', category: 'Shoes', description: 'Lorem ipsum Lorem ipsum', size: 'L', color: 'Blue', quantity: 50, price: '$60' },
@@ -16,94 +15,72 @@ const InventoryConsole = () => {
   ];
 
   const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
+    const value = e.target.value;
+    setSearchTerm(value);  
+    const result = inventoryData.filter(item =>
+      item.skuId.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredData(result);
   };
-
-  const handleSearch = () => {
-    const result = inventoryData.find(item => item.skuId === searchTerm);
-    if (result) {
-      setHoverData(result);
-    }
-  };
-
-  const closePopup = () => {
-    setHoverData(null);
-  };
+  const handleSearch = () => console.log('Search term:', searchTerm);
 
   return (
     <Container fluid className="p-4">
       <Row>
-        {/* <Col md={2}>
-          <Sidebar />
-        </Col> */}
-        <Col md={10}>
+        <Col>
           <Row className="mb-4">
-            <Col md={10}>
-              <input
-                type="text"
-                className="custom-input"
-                placeholder="Search by SKU"
-                value={searchTerm}
-                onChange={handleSearchChange}
-              />
-            </Col>
-            <Col md={2}>
-              <Button variant="outline-secondary" onClick={handleSearch}>
-                Search
-              </Button>
-            </Col>
+            <Col md={6} sm={12}>
+              <InputGroup>
+                <FormControl
+                  placeholder="Search by SKU"
+                  aria-label="Search by SKU"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
+                <Button variant="outline-secondary" onClick={handleSearch}>
+                  Search
+                </Button>
+              </InputGroup>
+            </Col>   
           </Row>
           <Row>
             <Col>
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th>SKU ID</th>
-                    <th>Product ID</th>
-                    <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>Size</th>
-                    <th>Color</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {inventoryData.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.skuId}</td>
-                      <td>{item.productId}</td>
-                      <td>{item.productName}</td>
-                      <td>{item.category}</td>
-                      <td>{item.description}</td>
-                      <td>{item.size}</td>
-                      <td>{item.color}</td>
-                      <td>{item.quantity}</td>
-                      <td>{item.price}</td>
+              <div className="table-responsive">
+                <Table striped bordered hover className="w-100">
+                  <thead>
+                    <tr>
+                      <th>SKU ID</th>
+                      <th>Product ID</th>
+                      <th>Product Name</th>
+                      <th>Category</th>
+                      <th>Description</th>
+                      <th>Size</th>
+                      <th>Color</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
+                  </thead>
+                  <tbody>
+                    {(filteredData.length > 0 ? filteredData : inventoryData).map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.skuId}</td>
+                        <td>{item.productId}</td>
+                        <td>{item.productName}</td>
+                        <td>{item.category}</td>
+                        <td>{item.description}</td>
+                        <td>{item.size}</td>
+                        <td>{item.color}</td>
+                        <td>{item.quantity}</td>
+                        <td>{item.price}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
             </Col>
           </Row>
         </Col>
       </Row>
-      {hoverData && (
-        <div className="popup">
-          <div className="popup-header">
-            <span className="close-btn" onClick={closePopup}>&times;</span>
-          </div>
-          <div className="popup-content">
-          <h3>Item Details</h3>
-            {Object.entries(hoverData).map(([key, value], index) => (
-              <div key={index}>
-                <strong>{key}:</strong> {value}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </Container>
   );
 };

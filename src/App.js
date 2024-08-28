@@ -24,13 +24,14 @@ function App() {
         dispatch(logout());
     }
     return (
-        <div className='app-container'>
-      <Router>
+        <Router>
+
+        <div style={{display:"flex",flexDirection:"column",minHeight:"100vh"}}>
         <Header onLogout={handleLogout} isLoggedIn={isLoggedIn} />
-        <div className="container-fluid">
+        <div style={{overflow:"auto",flex:1, height:"100vh"}}>
           {isLoggedIn ? (
-            <div className="row">
-              <div className="col-2 sidebar-container">
+            <div className="row">                       
+              <div className="col-2">
                 <Sidebar />
               </div>
               <div className="col-10">
@@ -44,9 +45,12 @@ function App() {
             </Routes>
           )}
         </div>
-        <Footer />
-      </Router>
+        <div style={{display:"flex",flex:"0 0 auto"}}>
+        <Footer /> 
+        </div>
     </div>
+    </Router>
+
     );
 }
 

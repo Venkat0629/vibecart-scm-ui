@@ -37,6 +37,8 @@ const Login = ({onLogin}) => {
     e.preventDefault();
     if (validateForm()) {
       console.log({ email, password, role });
+      dispatch(login());
+      onLogin();
       navigate('/dashboard');
     }
   };
@@ -51,11 +53,7 @@ const Login = ({onLogin}) => {
     }
   };
 
-  const handleLogin = () => {
-    dispatch(login());
-    onLogin();
-  };
-
+  
   return (
     <div className="container d-flex justify-content-center align-items-center ">
         
@@ -108,7 +106,7 @@ const Login = ({onLogin}) => {
             type="submit"
             id="submitButton"
             className="btn btn-primary w-100"
-            onClick={handleLogin}
+            
           >
             Login
           </button>

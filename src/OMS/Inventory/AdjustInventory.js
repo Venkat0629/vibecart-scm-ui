@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Button, Table } from 'react-bootstrap';
-import Sidebar from './sidebar';
+import { Container, Row, Col, Button, Table, InputGroup, FormControl } from 'react-bootstrap';
 import './Styling/inv_location.css';
 
 const AdjustInventory = () => {
@@ -17,13 +16,9 @@ const AdjustInventory = () => {
   const [editingSkuId, setEditingSkuId] = useState(null);
   const [editableFields, setEditableFields] = useState({});
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
-  const handleSearch = () => {
-    console.log('Search term:', searchTerm);
-  };
+  const handleSearch = () => console.log('Search term:', searchTerm);
 
   const handleSelectAllChange = (e) => {
     const isChecked = e.target.checked;
@@ -62,15 +57,9 @@ const AdjustInventory = () => {
     setEditableFields({});
   };
 
-  const handleCancelEdit = () => {
-    setEditingSkuId(null);
-    setEditableFields({});
-  };
-
   const handleUpdateSelected = () => {
     const selectedItems = inventoryData.filter((item) => item.selected);
     console.log('Selected items for bulk update:', selectedItems);
-
   };
 
   const filteredData = inventoryData.filter(
@@ -82,24 +71,21 @@ const AdjustInventory = () => {
   return (
     <Container fluid className="p-4">
       <Row>
-        {/* <Col md={2}>
-          <Sidebar />
-        </Col> */}
-        <Col md={10}>
+        <Col md={12}>
           <Row className="mb-4">
-            <Col md={10}>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search by SKU"
-                value={searchTerm}
-                onChange={handleSearchChange}
-              />
-            </Col>
-            <Col md={2}>
-              <Button variant="outline-secondary" onClick={handleSearch}>
-                Search
-              </Button>
+            <Col md={6}>
+              <InputGroup>
+                <FormControl
+                  placeholder="Search by SKU"
+                  aria-label="Search by SKU"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  className="custom-input"
+                />
+                <Button variant="outline-secondary" onClick={handleSearch}>
+                  Search
+                </Button>
+              </InputGroup>
             </Col>
           </Row>
           <Row className="mb-3">
@@ -111,15 +97,14 @@ const AdjustInventory = () => {
                 onChange={handleSelectAllChange}
               />
               <label htmlFor="selectAll" className="ms-2">Select All</label>
-              <Button variant='warning' className="ms-3" onClick={handleUpdateSelected}>
+              <Button variant="warning" className="ms-3" onClick={handleUpdateSelected}>
                 Update Selected
               </Button>
-
             </Col>
           </Row>
           <Row>
             <Col>
-              <Table striped bordered hover responsive="sm">
+              <Table striped bordered hover responsive className="w-100">
                 <thead>
                   <tr>
                     <th>Select</th>
@@ -256,32 +241,30 @@ const AdjustInventory = () => {
                         <td>
                           <div className="d-flex">
                             <Button
-                              variant='info'
+                              variant="info"
                               onClick={() => handleEdit(item.skuId)}
                               disabled={editingSkuId === item.skuId}
                               className="me-2"
                             >
                               Edit
                             </Button>
-
                             <Button
-                              variant='secondary'
+                              variant="secondary"
                               onClick={handleUpdate}
                               disabled={editingSkuId !== item.skuId}
                               className="me-2"
                             >
                               Update
                             </Button>
-
-                           
                           </div>
-
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="12" className="text-center">No Inventory Items Found</td>
+                      <td colSpan="12" className="text-center">
+                        No data found
+                      </td>
                     </tr>
                   )}
                 </tbody>

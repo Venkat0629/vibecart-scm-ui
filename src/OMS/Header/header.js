@@ -14,13 +14,18 @@ const Header = ({ onLogout, isLoggedIn }) => {
                 Order Management System
             </div>
 
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center header-icons">
                 <div className="user-info d-flex flex-column align-items-center">
                     <FaUser className="user-icon" />
                     <span className="user-name">John Doe</span> 
                 </div>
-                {isLoggedIn && (<button onClick={onLogout}className="logout-button">
-                    <FaSignOutAlt className="logout-icon" /></button>)}
+                <div>
+                {isLoggedIn && (
+                    <button onClick={onLogout}className="logout-button">
+                    <FaSignOutAlt className="logout-icon" /><span className='logout-btn'>Logout</span>
+                    </button>
+                    )}
+                </div>
             </div>
         </header>
     );

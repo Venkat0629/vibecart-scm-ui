@@ -1,0 +1,17 @@
+.custom-input {
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+table th, table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+button {
+  margin: 0 5px;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
+}

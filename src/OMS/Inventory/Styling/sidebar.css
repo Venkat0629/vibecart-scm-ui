@@ -4,7 +4,7 @@
     border: 1px solid #ccc; 
     border-radius: 5px; 
     width: 100%; 
-    text-align: center; 
+    text-align: left !important; 
     padding: 10px; 
     margin-bottom: 10px; 
     margin-top: 10px;
@@ -16,6 +16,15 @@
     color: #fff; 
 }
 
-.sidebar .ml-3 .sidebar-btn {
+/* .sidebar .ml-3 .sidebar-btn {
     margin-left: 0; 
+} */
+/* .ml-3{
+    margin-left: 15px;
+} */
+
+@media(max-width:992px){
+    .sidebar{
+        display: block;
+    }
 }

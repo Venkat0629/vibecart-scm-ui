@@ -1,21 +1,20 @@
 import React from 'react';
-import { Container, Row, Col,  Card } from 'react-bootstrap';
-import Sidebar from './sidebar'; 
+import { Container, Row, Col, Card } from 'react-bootstrap';
 
 const Dashboard = () => {
     return (
         <div className='dashboard'>
             <Container fluid className="p-4">
                 <Row>
-                    {/* <Col md={2}>
-                        <Sidebar /> 
-                    </Col> */}
+                    
                     <Col md={10}>
                         <Row className="mb-4">
                             <Col>
-                                <Card>
+                                <Card className='text-center'>
+                                    <Card.Header>
+                                        <Card.Title>Orders Report</Card.Title>
+                                    </Card.Header>
                                     <Card.Body>
-                                        <Card.Title>Orders Report:</Card.Title>
                                         <div className="d-flex justify-content-around">
                                             <div>
                                                 <h2>456</h2>
@@ -36,9 +35,11 @@ const Dashboard = () => {
                         </Row>
                         <Row>
                             <Col>
-                                <Card>
+                                <Card className='text-center'>
+                                <Card.Header>
+                                        <Card.Title>Inventory Report</Card.Title>
+                                    </Card.Header>
                                     <Card.Body>
-                                        <Card.Title>Inventory Report:</Card.Title>
                                         <div className="d-flex justify-content-around">
                                             <div>
                                                 <h2>100</h2>
