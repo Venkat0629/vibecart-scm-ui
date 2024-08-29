@@ -15,6 +15,7 @@ const OrderUpdate = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [editingOrderId, setEditingOrderId] = useState(null);
   const [editableFields, setEditableFields] = useState({ orderStatus: '' });
+  
 
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
@@ -57,6 +58,7 @@ const OrderUpdate = () => {
     );
     setEditingOrderId(null);
     setEditableFields({ orderStatus: '' });
+    alert('Order status updated successfully');
   };
 
   const handleUpdateSelected = () => {

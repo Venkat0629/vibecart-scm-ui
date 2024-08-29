@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
-
+import './Styling/dashboard.css'
 const Dashboard = () => {
     return (
         <div className='dashboard'>
