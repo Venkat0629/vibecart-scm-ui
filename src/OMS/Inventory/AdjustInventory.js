@@ -104,7 +104,7 @@ const AdjustInventory = () => {
           </Row>
           <Row>
             <Col>
-              <Table striped bordered hover responsive className="w-100">
+              <Table bordered hover responsive className="w-100">
                 <thead>
                   <tr>
                     <th>Select</th>

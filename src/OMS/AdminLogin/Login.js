@@ -12,7 +12,6 @@ const Login = ({ onLogin }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Validate form inputs
   const validateForm = () => {
     const newErrors = { email: '', password: '' };
     let isValid = true;

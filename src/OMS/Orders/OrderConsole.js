@@ -21,7 +21,7 @@ const OrderConsole = () => {
 
   const handleSearch = () => {
     const filtered = orderData.filter((item) =>
-      String(item.orderId).toLowerCase().includes(searchTerm.toLowerCase())
+      item.orderId.toString().toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filtered);
   };
@@ -45,26 +45,20 @@ const OrderConsole = () => {
       </Row>
       <Row>
         <Col>
-          <Table striped bordered hover responsive className="w-100">
+          <Table bordered hover responsive className="w-100">
             <thead>
               <tr>
                 <th>Order ID</th>
                 <th>SKU ID</th>
                 <th>Product Name</th>
-                <th>Category</th>
-                <th>Size</th>
-                <th>Color</th>
                 <th>Quantity</th>
                 <th>Unit Price</th>
                 <th>Total Price</th>
-                <th>Coupon Used</th>
-                <th>Discounted Price</th>
-                <th>Payment Method</th>
-                <th>Payable Price</th>
-                <th>Name</th>
+                <th>Payment Method</th>                
+                <th>Customer Name</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Address</th>
+                <th>Shipping Address</th>
                 <th>City</th>
                 <th>State</th>
                 <th>Pincode</th>
@@ -78,16 +72,10 @@ const OrderConsole = () => {
                     <td>{item.orderId}</td>
                     <td>{item.skuId}</td>
                     <td>{item.productName}</td>
-                    <td>{item.category}</td>
-                    <td>{item.size}</td>
-                    <td>{item.color}</td>
                     <td>{item.quantity}</td>
                     <td>{item.unitPrice}</td>
                     <td>{item.totalPrice}</td>
-                    <td>{item.couponUsed}</td>
-                    <td>{item.discountedPrice}</td>
                     <td>{item.paymentMethod}</td>
-                    <td>{item.payablePrice}</td>
                     <td>{item.name}</td>
                     <td>{item.email}</td>
                     <td>{item.phone}</td>
@@ -100,7 +88,7 @@ const OrderConsole = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="20" className="text-center">No orders found</td>
+                  <td colSpan="15" className="text-center">No orders found</td>
                 </tr>
               )}
             </tbody>

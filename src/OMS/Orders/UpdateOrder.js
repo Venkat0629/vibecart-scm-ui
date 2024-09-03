@@ -23,7 +23,7 @@ const OrderUpdate = () => {
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
   const handleSearch = () => {
-    const filtered = orderData.filter((item) => 
+    const filtered = orderData.filter((item) =>
       item.orderId.toString().toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(filtered);
@@ -84,7 +84,7 @@ const OrderUpdate = () => {
 
   return (
     <Container fluid className="p-4">
-      <Row >
+      <Row>
         <Col md={12}>
           <Row className="mb-4">
             <Col md={4}>
@@ -110,39 +110,39 @@ const OrderUpdate = () => {
                 onChange={handleSelectAllChange}
               />
               <label htmlFor="selectAll" className="ms-2">Select All</label>
-              <Button variant="warning" className="ms-3" onClick={handleUpdateSelected}>
-                Update Selected
+              <Button variant="outline-secondary" className="ms-3" onClick={handleUpdateSelected}>
+                Update ALL
               </Button>
             </Col>
           </Row>
           <Row>
             <Col>
-              <Table  bordered hover responsive className="w-100">
+              <Table bordered hover responsive className="w-100">
                 <thead>
                   <tr>
                     <th>Select</th>
                     <th>Order ID</th>
                     <th>SKU ID</th>
                     <th>Product Name</th>
-                    <th>Category</th>
+                    {/* <th>Category Name</th>
                     <th>Size</th>
-                    <th>Color</th>
+                    <th>Color</th> */}
                     <th>Quantity</th>
                     <th>Unit Price</th>
                     <th>Total Price</th>
-                    <th>Coupon Used</th>
-                    <th>Discounted Price</th>
+                    {/* <th>Discounted Price</th>
+                    <th>Coupon Used</th> */}
                     <th>Payment Method</th>
-                    <th>Payable Price</th>
-                    <th>Name</th>
+                    <th>Customer Name</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Address</th>
+                    <th>Shipping Address</th>
                     <th>City</th>
                     <th>State</th>
                     <th>Pincode</th>
                     <th>Order Status</th>
                     <th>Action</th>
+                    
                   </tr>
                 </thead>
                 <tbody>
@@ -159,16 +159,14 @@ const OrderUpdate = () => {
                         <td>{item.orderId}</td>
                         <td>{item.skuId}</td>
                         <td>{item.productName}</td>
-                        <td>{item.category}</td>
-                        <td>{item.size}</td>
-                        <td>{item.color}</td>
+                        {/* <td>{item.categoryName || ''}</td>
+                        <td>{item.size || ''}</td>
+                        <td>{item.color || ''}</td> */}
                         <td>{item.quantity}</td>
                         <td>{item.unitPrice}</td>
                         <td>{item.totalPrice}</td>
-                        <td>{item.couponUsed}</td>
-                        <td>{item.discountedPrice}</td>
-                        <td>{item.paymentMethod}</td>
-                        <td>{item.payablePrice}</td>
+                        
+                        <td>{item.paymentMethod}</td>                        
                         <td>{item.name}</td>
                         <td>{item.email}</td>
                         <td>{item.phone}</td>
@@ -192,6 +190,7 @@ const OrderUpdate = () => {
                               <option value="OUT_FOR_DELIVERY">OUT_FOR_DELIVERY</option>
                               <option value="PICKUP_COURIER">PICKUP_COURIER</option>
                               <option value="CONFIRMED">CONFIRMED</option>
+
                             </Form.Control>
                           ) : (
                             item.orderStatus
@@ -199,11 +198,11 @@ const OrderUpdate = () => {
                         </td>
                         <td>
                           {editingOrderId === item.orderId ? (
-                            <Button variant="success" onClick={handleUpdate}>
+                            <Button variant="outline-secondary" onClick={handleUpdate}>
                               Update
                             </Button>
                           ) : (
-                            <Button variant="info" onClick={() => handleEdit(item.orderId)}>
+                            <Button variant="outline-secondary" onClick={() => handleEdit(item.orderId)}>
                               Edit
                             </Button>
                           )}
@@ -212,8 +211,8 @@ const OrderUpdate = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="24" className="text-center">
-                        No matching records found.
+                      <td colSpan="17" className="text-center">
+                        No orders found
                       </td>
                     </tr>
                   )}

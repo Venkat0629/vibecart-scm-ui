@@ -46,7 +46,7 @@ const InventoryConsole = () => {
           <Row>
             <Col>
               <div className="table-responsive">
-                <Table striped bordered hover className="w-100">
+                <Table bordered hover className="w-100">
                   <thead>
                     <tr>
                       <th>SKU ID</th>

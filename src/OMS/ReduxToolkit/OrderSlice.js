@@ -1,43 +1,41 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-
 export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
   const response = await axios.get('http://localhost:8090/vibe-cart/orders/getAllOrders');
   const orders = response.data.data || [];
   return orders.map((order) => ({
     orderId: order.orderId || '',
-    skuId: order.orderItems?.[0]?.itemId || '',
+    skuId: order.orderItems?.[0]?.itemId || '',  
     productName: order.orderItems?.[0]?.itemName || '',
-    category: order.category || '',
-    size: order.size || '',
-    color: order.color || '',
-    quantity: order.totalQuantity || '',
-    unitPrice: order.orderItems?.[0]?.unitPrice || '',
-    totalPrice: order.totalAmount || '',
-    couponUsed: order.couponUsed || '',
-    discountedPrice: order.discountedPrice || '',
-    paymentMethod: order.paymentStatus || '',
-    payablePrice: order.payablePrice || '',
-    name: order.customerName || '',
-    email: order.customerEmail || '',
-    phone: order.customerPhone || '',
-    address: order.shippingAddress || '',
-    city: order.shippingCity || '',
-    state: order.shippingState || '',
-    pincode: order.shippingZipCode || '',
+    
+    size: '', 
+    color: '', 
+    quantity: order.totalQuantity || 0,
+    unitPrice: order.orderItems?.[0]?.unitPrice || 0,
+    totalPrice: order.totalAmount || 0,
+    couponUsed: '', 
+    discountedPrice: '', 
+    paymentMethod: order.paymentMethod || '',
+    payablePrice: order.totalAmount || 0,
+    name: order.customer?.customerName || '',
+    email: order.customer?.email || '',
+    phone: order.customer?.phoneNumber || '',
+    address: order.shippingAddress?.address || '',
+    city: order.shippingAddress?.city || '',
+    state: order.shippingAddress?.state || '',
+    pincode: order.shippingAddress?.zipcode || '',
     orderStatus: order.orderStatus || '',
-    selected: false,
+    selected: false, 
   }));
 });
 
-
 export const updateOrderOnServer = createAsyncThunk(
-  'orders/updateOrderOnServer',
-  async (updatedOrder) => {
+  'orders/updateOrder',
+  async (order) => {
     const response = await axios.put(
-      `http://localhost:8090/vibe-cart/orders/updateOrder/${updatedOrder.orderId}`,
-      updatedOrder
+      `http://localhost:8090/vibe-cart/orders/updateOrder/${order.orderId}`,
+      order
     );
     return response.data;
   }
@@ -47,36 +45,33 @@ const orderSlice = createSlice({
   name: 'orders',
   initialState: {
     orderData: [],
-    loading: false,
+    status: 'idle',
     error: null,
   },
-  reducers: {
-    updateOrder: (state, action) => {
-      state.orderData = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchOrders.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.status = 'loading';
       })
       .addCase(fetchOrders.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = 'succeeded';
         state.orderData = action.payload;
       })
       .addCase(fetchOrders.rejected, (state, action) => {
-        state.loading = false;
+        state.status = 'failed';
         state.error = action.error.message;
       })
       .addCase(updateOrderOnServer.fulfilled, (state, action) => {
         const updatedOrder = action.payload;
-        state.orderData = state.orderData.map((order) =>
-          order.orderId === updatedOrder.orderId ? updatedOrder : order
+        const existingOrderIndex = state.orderData.findIndex(
+          (order) => order.orderId === updatedOrder.orderId
         );
+        if (existingOrderIndex >= 0) {
+          state.orderData[existingOrderIndex] = updatedOrder;
+        }
       });
   },
 });
 
-export const { updateOrder } = orderSlice.actions;
 export default orderSlice.reducer;
