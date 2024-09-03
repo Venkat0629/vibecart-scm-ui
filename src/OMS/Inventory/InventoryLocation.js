@@ -30,7 +30,7 @@ const InventoryLocation = () => {
             <Row>
                 <Col md={12}>
                     <Row className="mb-4">
-                        <Col md={6}>
+                        <Col md={4}>
                             <InputGroup>
                                 <FormControl
                                     placeholder="Search by SKU"

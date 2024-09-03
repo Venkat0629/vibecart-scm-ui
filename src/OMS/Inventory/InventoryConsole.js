@@ -29,7 +29,7 @@ const InventoryConsole = () => {
       <Row>
         <Col>
           <Row className="mb-4">
-            <Col md={6} sm={12}>
+            <Col md={4} sm={12}>
               <InputGroup>
                 <FormControl
                   placeholder="Search by SKU"

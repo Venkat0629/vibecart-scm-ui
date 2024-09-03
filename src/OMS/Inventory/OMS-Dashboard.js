@@ -1,7 +1,9 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import './Styling/dashboard.css'
 const Dashboard = () => {
+    const navigate = useNavigate();
     return (
         <div className='dashboard'>
             <Container fluid className="p-4">

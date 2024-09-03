@@ -1,67 +1,90 @@
 import React, { useState } from 'react';
 import { FaPlus, FaMinus, FaBars } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import './Styling/sidebar.css'; 
+import './Styling/sidebar.css';
 
 const Sidebar = () => {
     const navigate = useNavigate();
     const [showSidebar, setShowSidebar] = useState(false);
     const [showInventoryLinks, setShowInventoryLinks] = useState(false);
     const [showOrderLinks, setShowOrderLinks] = useState(false);
+    const [activeButton, setActiveButton] = useState(''); 
 
     const toggleSidebar = () => {
         setShowSidebar(prev => !prev);
     };
 
     const toggleInventoryLinks = () => {
-        setShowInventoryLinks(prev => !prev);
+        setShowInventoryLinks(prev => !prev); 
     };
 
     const toggleOrderLinks = () => {
-        setShowOrderLinks(prev => !prev);
+        setShowOrderLinks(prev => !prev); 
     };
 
-    const navigateTo = (path) => {
+    const handleButtonClick = (path) => {
+        setActiveButton(path); 
         navigate(path);
     };
 
     return (
         <div>
-            <button className='btn btn-outline-secondary d-lg-none mb-2' onClick={toggleSidebar}>
-                <FaBars /> Menu
-            </button>
             <div className={`sidebar ${showSidebar ? 'show' : ''}`}>
-                <button className="btn btn-outline-secondary sidebar-btn" onClick={() => navigate('/dashboard')}>
+                <button 
+                    className={`sidebar-btn ${activeButton === '/dashboard' ? 'active' : ''}`} 
+                    onClick={() => handleButtonClick('/dashboard')}
+                >
                     Dashboard
                 </button>
                 <div className="mb-2">
-                    <button className="btn btn-outline-secondary sidebar-btn d-flex justify-content-between align-items-center" onClick={toggleInventoryLinks}>
+                    <button 
+                        className={`sidebar-btn d-flex justify-content-between align-items-center ${showInventoryLinks ? 'active' : ''}`}
+                        onClick={toggleInventoryLinks}
+                    >
                         <span>Inventory</span> {showInventoryLinks ? <FaMinus /> : <FaPlus />}
                     </button>
                     {showInventoryLinks && (
                         <div className="sub-menu">
-                            <button className="btn btn-outline-secondary sidebar-btn" onClick={() => navigateTo('/inventoryConsole')}>
+                            <button 
+                                className={`sidebar-btn ${activeButton === '/inventoryConsole' ? 'active' : ''}`}
+                                onClick={() => handleButtonClick('/inventoryConsole')}
+                            >
                                 Inventory Console
                             </button>
-                            <button className="btn btn-outline-secondary sidebar-btn" onClick={() => navigateTo('/adjustInventory')}>
+                            <button 
+                                className={`sidebar-btn ${activeButton === '/adjustInventory' ? 'active' : ''}`}
+                                onClick={() => handleButtonClick('/adjustInventory')}
+                            >
                                 Adjust Inventory
                             </button>
-                            <button className="btn btn-outline-secondary sidebar-btn" onClick={() => navigateTo('/inventoryLocation')}>
+                            <button 
+                                className={`sidebar-btn ${activeButton === '/inventoryLocation' ? 'active' : ''}`}
+                                onClick={() => handleButtonClick('/inventoryLocation')}
+                            >
                                 Inventory Location
                             </button>
                         </div>
                     )}
                 </div>
                 <div className="mb-2">
-                    <button className="btn btn-outline-secondary sidebar-btn d-flex justify-content-between align-items-center" onClick={toggleOrderLinks}>
+                    <button 
+                        className={`sidebar-btn d-flex justify-content-between align-items-center ${showOrderLinks ? 'active' : ''}`}
+                        onClick={toggleOrderLinks}
+                    >
                         <span>Orders</span> {showOrderLinks ? <FaMinus /> : <FaPlus />}
                     </button>
                     {showOrderLinks && (
                         <div className='sub-menu'>
-                            <button className="btn btn-outline-secondary sidebar-btn" onClick={() => navigate('/orderConsole')}>
+                            <button 
+                                className={`sidebar-btn ${activeButton === '/orderConsole' ? 'active' : ''}`}
+                                onClick={() => handleButtonClick('/orderConsole')}
+                            >
                                 Order Console
                             </button>
-                            <button className="btn btn-outline-secondary sidebar-btn" onClick={() => navigate('/updateOrder')}>
+                            <button 
+                                className={`sidebar-btn ${activeButton === '/updateOrder' ? 'active' : ''}`}
+                                onClick={() => handleButtonClick('/updateOrder')}
+                            >
                                 Update Order
                             </button>
                         </div>

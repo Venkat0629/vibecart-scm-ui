@@ -1,43 +1,61 @@
-.container {
-  /* background-color: #f8f9fa; */
+.login-container {
+  margin: auto;
+  background-color: var(--background-color) !important;
+}
+.login-card {
+  min-width: 400px;
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--card-background-color);
+  margin-top: 100px;
+}
+
+.login-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: var(--title-color);
+}
+
+  .form-group {
+  margin-bottom: 15px;
+}
+.form-control.error-highlight {
+  border-color: var(--error-border-color);
+}
+.error-message {
+  color: var(--error-text-color);
+  font-size: 14px;
+}
+.login-container {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 80px;
-}
-
-.login-box {
-  max-width: 400px;
+  align-items: center;
+  background-image: url('https://tailwindui.com/img/beams-cover@95.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   width: 100%;
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  padding: 20px;
+  margin: 0;
+  /* text-align: center; */
 }
-
-.login-box h2 {
-  border-bottom: 1px solid #dee2e6;
-  padding-bottom: 10px;
-  text-align: center;
+.login-button {
+  background-color: #dd1e25;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 30%;
+  margin-left: 120px;
+  
+  transition: background-color 0.3s ease;
 }
-
-.login-box .form-control, 
-.login-box .form-select {
-  border-radius: 0;
-  border: 1px solid #ced4da;
-  /* background-color: #f0f0f0 ; */
-}
-.form-control::placeholder {
-  color: #6c757d;
-  opacity: 1; 
-}
-.login-box button {
-  border-radius: 0;
-  background-color: #0056b3;
-  border: 1px solid #6c757d;
-  width: 100%;
-}
-
-.login-box button:hover {
-  background-color: #0069d9;
-  border: 1px solid #545b62;
+.form-control:focus {
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+  /* border-color: #86b7fe; */
+  outline: 0;
+  /* box-shadow: 0 0 0 .25rem rgba(13,110,253,.25); */
 }

@@ -1,36 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchOrders, updateOrderOnServer } from '../ReduxToolkit/OrderSlice';
 import { Container, Row, Col, Button, Table, InputGroup, FormControl, Form } from 'react-bootstrap';
-import '../Orders/updateorder.css';
 
 const OrderUpdate = () => {
-  const [orderData, setOrderData] = useState([
-    { orderId: '34567', skuId: '23345362', productName: 'Sporty Runner', category: 'Shoes', size: 'L', color: 'Blue', quantity: 2, unitPrice: 60, totalPrice: 120, couponUsed: 'JUNBON345', discountedPrice: 10, paymentMethod: 'Cash', payablePrice: 110, name: 'John Doe', email: 'johndoe@gmail.com', phone: '(957) 987-8797', address: 'Jannapriya Homes, Chintalaktuna', city: 'Hyderabad', state: 'Telangana', pincode: '500070', orderStatus: 'Order Confirmed' },
-    { orderId: '34566', skuId: '23345363', productName: 'Sporty Runner', category: 'Shoes', size: 'L', color: 'Blue', quantity: 2, unitPrice: 60, totalPrice: 120, couponUsed: 'JUNBON345', discountedPrice: 10, paymentMethod: 'Cash', payablePrice: 110, name: 'John Doe', email: 'johndoe@gmail.com', phone: '(957) 987-8797', address: 'Jannapriya Homes, Chintalaktuna', city: 'Hyderabad', state: 'Telangana', pincode: '500070', orderStatus: 'Order Confirmed' },
-    { orderId: '34568', skuId: '23345364', productName: 'Sporty Runner', category: 'Shoes', size: 'L', color: 'Blue', quantity: 2, unitPrice: 60, totalPrice: 120, couponUsed: 'JUNBON345', discountedPrice: 10, paymentMethod: 'Cash', payablePrice: 110, name: 'John Doe', email: 'johndoe@gmail.com', phone: '(957) 987-8797', address: 'Jannapriya Homes, Chintalaktuna', city: 'Hyderabad', state: 'Telangana', pincode: '500070', orderStatus: 'Order Confirmed' },
-    { orderId: '34569', skuId: '23345365', productName: 'Sporty Runner', category: 'Shoes', size: 'L', color: 'Blue', quantity: 2, unitPrice: 60, totalPrice: 120, couponUsed: 'JUNBON345', discountedPrice: 10, paymentMethod: 'Cash', payablePrice: 110, name: 'John Doe', email: 'johndoe@gmail.com', phone: '(957) 987-8797', address: 'Jannapriya Homes, Chintalaktuna', city: 'Hyderabad', state: 'Telangana', pincode: '500070', orderStatus: 'Order Confirmed' },
-    
-  ]);
-
+  const dispatch = useDispatch();
+  const orderData = useSelector((state) => state.orders.orderData);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectAll, setSelectAll] = useState(false);
   const [editingOrderId, setEditingOrderId] = useState(null);
   const [editableFields, setEditableFields] = useState({ orderStatus: '' });
-  
+  const [filteredData, setFilteredData] = useState([]);
+
+  useEffect(() => {
+    dispatch(fetchOrders());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setFilteredData(orderData);
+  }, [orderData]);
 
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
-  const handleSearch = () => console.log('Search term:', searchTerm);
+  const handleSearch = () => {
+    const filtered = orderData.filter((item) => 
+      item.orderId.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredData(filtered);
+  };
 
-  const handleSelectAllChange = (e) => {
-    const isChecked = e.target.checked;
-    setSelectAll(isChecked);
-    setOrderData((prevData) =>
-      prevData.map((item) => ({ ...item, selected: isChecked }))
+  const handleSelectAllChange = () => {
+    setSelectAll(!selectAll);
+    setFilteredData((prevData) =>
+      prevData.map((item) => ({ ...item, selected: !selectAll }))
     );
   };
 
+  const handleUpdateSelected = () => {
+    const selectedOrders = filteredData.filter((item) => item.selected);
+    selectedOrders.forEach((order) => {
+      dispatch(updateOrderOnServer(order))
+        .then(() => {
+          dispatch(fetchOrders());
+        })
+        .catch((error) => console.error('Error updating order:', error));
+    });
+  };
+
   const handleCheckboxChange = (orderId) => {
-    setOrderData((prevData) =>
+    setFilteredData((prevData) =>
       prevData.map((item) =>
         item.orderId === orderId ? { ...item, selected: !item.selected } : item
       )
@@ -39,7 +57,7 @@ const OrderUpdate = () => {
 
   const handleEdit = (orderId) => {
     setEditingOrderId(orderId);
-    const itemToEdit = orderData.find((item) => item.orderId === orderId);
+    const itemToEdit = filteredData.find((item) => item.orderId === orderId);
     setEditableFields({ orderStatus: itemToEdit.orderStatus });
   };
 
@@ -49,42 +67,33 @@ const OrderUpdate = () => {
   };
 
   const handleUpdate = () => {
-    setOrderData((prevData) =>
-      prevData.map((item) =>
-        item.orderId === editingOrderId
-          ? { ...item, orderStatus: editableFields.orderStatus }
-          : item
-      )
-    );
-    setEditingOrderId(null);
-    setEditableFields({ orderStatus: '' });
-    alert('Order status updated successfully');
-  };
+    const updatedOrder = {
+      orderId: editingOrderId,
+      orderStatus: editableFields.orderStatus,
+    };
 
-  const handleUpdateSelected = () => {
-    const selectedItems = orderData.filter((item) => item.selected);
-    console.log('Selected items for bulk update:', selectedItems);
+    dispatch(updateOrderOnServer(updatedOrder))
+      .then(() => {
+        dispatch(fetchOrders());
+        setEditingOrderId(null);
+        setEditableFields({ orderStatus: '' });
+        alert('Order status updated successfully');
+      })
+      .catch((error) => console.error('Error updating order:', error));
   };
-
-  const filteredData = orderData.filter(
-    (item) =>
-      item.orderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.productName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <Container fluid className="p-4">
-      <Row>
+      <Row >
         <Col md={12}>
           <Row className="mb-4">
-            <Col md={6}>
+            <Col md={4}>
               <InputGroup>
                 <FormControl
                   placeholder="Search by Order ID"
                   aria-label="Search by Order ID"
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  className="custom-input"
                 />
                 <Button variant="outline-secondary" onClick={handleSearch}>
                   Search
@@ -108,7 +117,7 @@ const OrderUpdate = () => {
           </Row>
           <Row>
             <Col>
-              <Table striped bordered hover responsive className="w-100">
+              <Table  bordered hover responsive className="w-100">
                 <thead>
                   <tr>
                     <th>Select</th>
@@ -174,13 +183,15 @@ const OrderUpdate = () => {
                               name="orderStatus"
                               value={editableFields.orderStatus}
                               onChange={handleInputChange}
-                              className="form-control"
                             >
-                              <option value="Order Created">Order Confirmed</option>
-                              <option value="Processing">Processing</option>
-                              <option value="Shipped">Shipped</option>
-                              <option value="Delivered">Delivered</option>
-                              <option value="Cancelled">Cancelled</option>
+                              <option value="DISPATCHED">DISPATCHED</option>
+                              <option value="PENDING">PENDING</option>
+                              <option value="ON_THE_WAY">ON_THE_WAY</option>
+                              <option value="DELIVERED">DELIVERED</option>
+                              <option value="CANCELLED">CANCELLED</option>
+                              <option value="OUT_FOR_DELIVERY">OUT_FOR_DELIVERY</option>
+                              <option value="PICKUP_COURIER">PICKUP_COURIER</option>
+                              <option value="CONFIRMED">CONFIRMED</option>
                             </Form.Control>
                           ) : (
                             item.orderStatus

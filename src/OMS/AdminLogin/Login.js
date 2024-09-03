@@ -4,14 +4,15 @@ import { useDispatch } from 'react-redux';
 import { login } from '../ReduxToolkit/AuthSlice'; 
 import './login.css';
 
-const Login = ({onLogin}) => {
+const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('user');
   const [errors, setErrors] = useState({ email: '', password: '' });
   const navigate = useNavigate();
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
 
+  // Validate form inputs
   const validateForm = () => {
     const newErrors = { email: '', password: '' };
     let isValid = true;
@@ -37,6 +38,11 @@ const Login = ({onLogin}) => {
     e.preventDefault();
     if (validateForm()) {
       console.log({ email, password, role });
+
+      
+      const token = 'sample-token'; 
+      localStorage.setItem('token', token); 
+      localStorage.setItem('username', email); 
       dispatch(login());
       onLogin();
       navigate('/dashboard');
@@ -53,42 +59,40 @@ const Login = ({onLogin}) => {
     }
   };
 
-  
   return (
-    <div className="container d-flex justify-content-center align-items-center ">
-        
-      <div className="login-box border rounded p-4">
-        <h2 className="text-center mb-4">Login</h2>
+    <div className="login-container d-flex justify-content-center align-items-center ">
+      <div className="login-card border rounded p-4">
+        <h2 className="text-center mb-4 login-title">Login</h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label" >Email ID</label>
+          <div className="mb-3 form-group">
+            <label htmlFor="email" className="form-label">Email ID</label>
             <input
               type="email"
               className={`form-control ${errors.email ? 'is-invalid' : ''}`}
               id="email"
               value={email}
-              placeholder='Enter a Email'
+              placeholder='Enter an Email'
               onChange={(e) => setEmail(e.target.value)}
               onKeyDown={(e) => handleKeyDown(e, 'password')}
             />
             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
           </div>
-          
-          <div className="mb-3">
+
+          <div className="mb-3 form-group">
             <label htmlFor="password" className="form-label">Password</label>
             <input
               type="password"
               className={`form-control ${errors.password ? 'is-invalid' : ''}`}
               id="password"
               value={password}
-              placeholder='Enter a Password'
+              placeholder='Enter Password'
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={(e) => handleKeyDown(e, 'role')}
             />
             {errors.password && <div className="invalid-feedback">{errors.password}</div>}
           </div>
 
-          <div className="mb-3">
+          <div className="mb-3 form-group">
             <label htmlFor="role" className="form-label">User Role</label>
             <select
               id="role"
@@ -101,12 +105,11 @@ const Login = ({onLogin}) => {
               <option value="admin">Admin</option>
             </select>
           </div>
-
+        
           <button
             type="submit"
             id="submitButton"
-            className="btn btn-primary w-100"
-            
+            className="login-button"
           >
             Login
           </button>

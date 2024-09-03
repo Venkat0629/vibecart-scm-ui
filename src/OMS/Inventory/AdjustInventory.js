@@ -73,7 +73,7 @@ const AdjustInventory = () => {
       <Row>
         <Col md={12}>
           <Row className="mb-4">
-            <Col md={6}>
+            <Col md={4}>
               <InputGroup>
                 <FormControl
                   placeholder="Search by SKU"
@@ -97,7 +97,7 @@ const AdjustInventory = () => {
                 onChange={handleSelectAllChange}
               />
               <label htmlFor="selectAll" className="ms-2">Select All</label>
-              <Button variant="warning" className="ms-3" onClick={handleUpdateSelected}>
+              <Button variant="outline-secondary" className="ms-3" onClick={handleUpdateSelected}>
                 Update Selected
               </Button>
             </Col>
@@ -241,7 +241,7 @@ const AdjustInventory = () => {
                         <td>
                           <div className="d-flex">
                             <Button
-                              variant="info"
+                              variant="outline-secondary"
                               onClick={() => handleEdit(item.skuId)}
                               disabled={editingSkuId === item.skuId}
                               className="me-2"
@@ -249,7 +249,7 @@ const AdjustInventory = () => {
                               Edit
                             </Button>
                             <Button
-                              variant="secondary"
+                              variant="outline-secondary"
                               onClick={handleUpdate}
                               disabled={editingSkuId !== item.skuId}
                               className="me-2"

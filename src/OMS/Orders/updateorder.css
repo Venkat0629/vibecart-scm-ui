@@ -1,17 +1,93 @@
 .custom-input {
   border-radius: 5px;
   padding: 5px 10px;
+  width: 100%;
+  max-width: 400px; 
+  margin: 0 auto; 
 }
 
 table th, table td {
   text-align: center;
   vertical-align: middle;
+  padding: 8px; 
 }
 
 button {
-  margin: 0 5px;
+  margin: 5px; 
 }
 
 input[type="checkbox"] {
   margin-right: 5px;
+}
+
+.dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%; 
+}
+
+.dropdown-control {
+  padding-right: 30px;
+  width: 100%;
+  max-width: 200px; 
+}
+
+.dropdown-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #000;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .custom-input {
+    width: 100%;
+    padding: 10px;
+  }
+
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  table th, table td {
+    font-size: 12px; 
+    padding: 6px;
+  }
+
+  .dropdown-wrapper {
+    width: 100%;
+  }
+
+  .dropdown-control {
+    width: 100%;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 10px; 
+  }
+}
+
+@media (max-width: 576px) {
+  .custom-input {
+    width: 100%;
+    padding: 10px;
+  }
+
+  table th, table td {
+    font-size: 10px;
+    padding: 4px;
+  }
+  
+  .dropdown-control {
+    width: 100%;
+  }
 }
