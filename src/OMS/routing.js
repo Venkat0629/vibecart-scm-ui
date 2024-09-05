@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Dashboard from "./Inventory/OMS-Dashboard";  
+import Dashboard from "./Inventory/Omsdashboard";  
 import InventoryConsole from "./Inventory/InventoryConsole";  
 import AdjustInventory from "./Inventory/AdjustInventory";  
 import InventoryLocation from "./Inventory/InventoryLocation"; 

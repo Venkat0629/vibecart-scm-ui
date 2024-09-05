@@ -3,8 +3,9 @@ import { Container, Row, Col, Card } from 'react-bootstrap';
 import * as am5 from "@amcharts/amcharts5";
 import * as am5percent from "@amcharts/amcharts5/percent";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
+// import InventoryDashboard from './InventoryDashboard';
 
-const Dashboard = () => {
+const Omsdashboard = () => {
     const [orders, setOrders] = useState([]);
     const [totalOrders, setTotalOrders] = useState(0);
     const [processedOrders, setProcessedOrders] = useState(0);
@@ -15,8 +16,15 @@ const Dashboard = () => {
         shoes: 51
     });
 
+    
+
     useEffect(() => {
         const fetchData = async () => {
+           try {
+            const inventoryresponse=await fetch('http://localhost:9015/vibe-cart/inventory')
+           } catch (error) {
+            
+           }
             try {
                 const response = await fetch('http://localhost:8090/vibe-cart/orders/getAllOrders', {
                     method: 'GET',
@@ -184,8 +192,8 @@ const Dashboard = () => {
                                 </Card.Body>
                             </Card>
                         </Col>
-
-                        {/* Inventory Section with Chart */}
+                       
+                     
                         <Col md={6}>
                             <Card className='text-center mb-4'>
                                 <Card.Header>
@@ -224,4 +232,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default Omsdashboard;

@@ -1,6 +1,36 @@
-.close-btn {
-    font-size: 18px;
-    cursor: pointer;
+.table-responsive {
+    margin-top: 20px;
+  }
+  
+  .table {
+    background-color: #f8f9fa;
+  }
+  
+  .pagination {
+    margin-top: 20px;
+  }
+  
+  .spinner-border {
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  .text-center {
+    margin-top: 50px;
+  }
+  .FormControl{
+    border-right: 2px solid #dedede;
+  }
+  .custom-input {
+    padding: 10px; /* Adjust this to increase or decrease padding */
+    height: auto;
 }
 
+.custom-input-group {
+    margin-top: 20px; /* Add margin/padding as needed */
+    margin-bottom: 20px;
+}
 
+.table-responsive {
+    margin-top: 20px; /* Optional: to ensure space between search and table */
+}

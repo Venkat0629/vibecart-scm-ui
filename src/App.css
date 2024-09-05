@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+/* updation css */
+
+.sidebar_parent{
+  border-right: 2px solid #dedede;
+}
+.dashboard_parent{
+  background-color: rgba(0, 0, 0, 0.05);
+}

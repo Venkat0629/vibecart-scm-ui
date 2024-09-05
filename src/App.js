@@ -29,10 +29,10 @@ function App() {
         <div style={{overflow:"auto",flex:1, height:"100vh"}}>
           {isLoggedIn ? (
             <div className="row">                       
-              <div className="col-2">
+              <div className="col-2 sidebar_parent">
                 <Sidebar />
               </div>
-              <div className="col-10">
+              <div className="col-10 dashboard_parent">
                 <Routing />
               </div>
             </div>
