@@ -3,7 +3,7 @@ import { Container, Row, Col, Card } from 'react-bootstrap';
 import * as am5 from "@amcharts/amcharts5";
 import * as am5percent from "@amcharts/amcharts5/percent";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
-
+ 
 const Dashboard = () => {
     const [orders, setOrders] = useState([]);
     const [totalOrders, setTotalOrders] = useState(0);
@@ -14,7 +14,7 @@ const Dashboard = () => {
         jackets: 49,
         shoes: 51
     });
-
+ 
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -24,24 +24,24 @@ const Dashboard = () => {
                         'Content-Type': 'application/json',
                     },
                 });
-
+ 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
+ 
                 const result = await response.json();
-
+ 
                 if (result.success) {
                     setOrders(result.data);
-
+ 
                     const total = result.data.length;
                     const processed = result.data.filter(order => order.orderStatus !== 'CANCELLED').length;
                     const completed = result.data.filter(order => order.orderStatus === 'DELIVERED').length;
-
+ 
                     setTotalOrders(total);
                     setProcessedOrders(processed);
                     setCompletedOrders(completed);
-
+ 
                     createPieChart('orderPieChart', processed, completed, total - processed - completed);
                     createInventoryChart('inventoryPieChart', inventoryData);
                 } else {
@@ -51,34 +51,34 @@ const Dashboard = () => {
                 console.error('Error fetching orders:', error);
             }
         };
-
+ 
         fetchData();
     }, [inventoryData]);
-
+ 
     const createPieChart = (elementId, processed, completed, cancelled) => {
         let root = am5.Root.new(elementId);
-
+ 
         root.setThemes([
             am5themes_Animated.new(root)
         ]);
-
-        // Custom color set with variations of #dd1e25
+ 
+        
         let colors = am5.ColorSet.new(root, {
             colors: [
-                am5.color("#dd1e25"), // Base color
-                am5.color("#fbb3b5"), // Slightly lighter
-                am5.color("#c1121f"), // Slightly darker
-                am5.color("#f08080")  // Lighter variation
+                am5.color("#dd1e25"), 
+                am5.color("#fbb3b5"), 
+                am5.color("#c1121f"), 
+                am5.color("#f08080") 
             ],
             reuse: true
         });
-
+ 
         let chart = root.container.children.push(
             am5percent.PieChart.new(root, {
                 layout: root.verticalLayout
             })
         );
-
+ 
         let series = chart.series.push(
             am5percent.PieSeries.new(root, {
                 name: "Series",
@@ -86,45 +86,44 @@ const Dashboard = () => {
                 categoryField: "category"
             })
         );
-
-        series.set("colors", colors); // Apply the custom color set
-
+ 
+        series.set("colors", colors); 
+ 
         let data = [
             { category: "Processed", value: processed },
             { category: "Completed", value: completed },
             { category: "Cancelled", value: cancelled }
         ];
-
+ 
         series.data.setAll(data);
-
+ 
         series.appear(1000, 100);
         chart.appear(1000, 100);
     };
-
+ 
     const createInventoryChart = (elementId, data) => {
         let root = am5.Root.new(elementId);
-
+ 
         root.setThemes([
             am5themes_Animated.new(root)
         ]);
-
-        // Custom color set for inventory chart
+ 
         let colors = am5.ColorSet.new(root, {
             colors: [
-                am5.color("#dd1e25"), // Base color
-                am5.color("#fbb3b5"), // Slightly lighter
-                am5.color("#c1121f"), // Slightly darker
-                am5.color("#f08080")  // Lighter variation
+                am5.color("#dd1e25"), 
+                am5.color("#fbb3b5"), 
+                am5.color("#c1121f"),
+                am5.color("#f08080")  
             ],
             reuse: true
         });
-
+ 
         let chart = root.container.children.push(
             am5percent.PieChart.new(root, {
                 layout: root.verticalLayout
             })
         );
-
+ 
         let series = chart.series.push(
             am5percent.PieSeries.new(root, {
                 name: "Series",
@@ -132,34 +131,34 @@ const Dashboard = () => {
                 categoryField: "category"
             })
         );
-
-        series.set("colors", colors); // Apply the custom color set
-
+ 
+        series.set("colors", colors); 
+ 
         let chartData = [
             { category: "Total Products", value: data.totalProducts },
             { category: "Jackets", value: data.jackets },
             { category: "Shoes", value: data.shoes }
         ];
-
+ 
         series.data.setAll(chartData);
-
+ 
         series.appear(1000, 100);
         chart.appear(1000, 100);
     };
-
+ 
     return (
         <div>
             <div className='dashboard'>
                 <Container fluid className="p-4">
                     <Row>
-                        {/* Orders Report and Pie Chart */}
+                        
                         <Col md={6}>
                             <Card className='text-center mb-4'>
                                 <Card.Header>
                                     <Card.Title>Orders Report</Card.Title>
                                 </Card.Header>
                                 <Card.Body>
-                                    <div className="d-flex justify-content-around">
+                                    <div  className="d-flex justify-content-around">
                                         <div>
                                             <h2>{totalOrders}</h2>
                                             <p>Total Orders</p>
@@ -180,12 +179,12 @@ const Dashboard = () => {
                                     <Card.Title>Order Status Distribution</Card.Title>
                                 </Card.Header>
                                 <Card.Body>
-                                    <div id="orderPieChart" style={{ width: "100%", height: "400px" }}></div>
+                                    <div id="orderPieChart" data-testid="orderPieChart" style={{ width: "100%", height: "400px" }}></div>
                                 </Card.Body>
                             </Card>
                         </Col>
-
-                        {/* Inventory Section with Chart */}
+ 
+                        
                         <Col md={6}>
                             <Card className='text-center mb-4'>
                                 <Card.Header>
@@ -213,7 +212,7 @@ const Dashboard = () => {
                                     <Card.Title>Inventory Status Distribution</Card.Title>
                                 </Card.Header>
                                 <Card.Body>
-                                    <div id="inventoryPieChart" style={{ width: "100%", height: "400px" }}></div>
+                                    <div id="inventoryPieChart" data-testid="inventoryPieChart" style={{ width: "100%", height: "400px" }}></div>
                                 </Card.Body>
                             </Card>
                         </Col>
@@ -223,5 +222,7 @@ const Dashboard = () => {
         </div>
     );
 };
-
+ 
 export default Dashboard;
+ 
+ 

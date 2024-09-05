@@ -39,7 +39,7 @@ const Header = ({ onLogout, isLoggedIn }) => {
                         onClick={toggleDropdown} 
                         style={{ display: "flex", flexDirection: "column" }}
                     >
-                        <FaUser className="user-icon red-outline" size={24} />
+                        <FaUser aria-label="user" className="user-icon red-outline" size={24} />
                         <div className={`dropdown-menu ${dropdownOpen ? 'show' : ''}`}>
                             <div className="dropdown-header">Account Details</div>
                             <a href="#" className="dropdown-item">{username}</a>
