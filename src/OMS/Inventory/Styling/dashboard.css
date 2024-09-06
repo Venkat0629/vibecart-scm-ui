@@ -1,4 +1,4 @@
-.sidebar-btn {
+/* .sidebar-btn {
     width: 100%;
     text-align: left;
     padding: 10px 15px;
@@ -24,8 +24,23 @@
 .sidebar .btn-outline-secondary.active {
     background-color: #ced4da;
     border-color: #adb5bd;
-}
+} */
 /* .col-bg{
     background-color:  rgba(0, 0, 0, 0.05);
     height: 100%;
 } */
+/* .dashboard{
+    background-color: #efefef !important;
+} */
+.card {
+    padding-right: 0 !important;
+     /* Removes margin at the bottom */
+}
+.card-header .card-title {
+    margin-bottom: 0 !important;
+}
+
+/* Optionally, you can also ensure no padding or margins are set to the body inside cards */
+.card-body {
+    padding-right: 0 !important;
+}

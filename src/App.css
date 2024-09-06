@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+.data-table{
+  font-size: 14px;
+}
+.content-section{
+  background-color: #efefef !important;
+  min-height: calc(100vh - 90px);
+}

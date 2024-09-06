@@ -69,12 +69,13 @@ const AdjustInventory = () => {
   );
 
   return (
+    <div className='content-section'>
     <Container fluid className="p-4">
       <Row>
         <Col md={12}>
           <Row className="mb-4">
             <Col md={4}>
-              <InputGroup>
+              <InputGroup style={{ border: '1px solid black',borderRadius: '7px', overflow: 'hidden' }}>
                 <FormControl
                   placeholder="Search by SKU"
                   aria-label="Search by SKU"
@@ -87,8 +88,6 @@ const AdjustInventory = () => {
                 </Button>
               </InputGroup>
             </Col>
-          </Row>
-          <Row className="mb-3">
             <Col className="d-flex justify-content-end align-items-center">
               <input
                 type="checkbox"
@@ -102,14 +101,29 @@ const AdjustInventory = () => {
               </Button>
             </Col>
           </Row>
+          {/* <Row className="mb-3">
+            <Col className="d-flex justify-content-end align-items-center">
+              <input
+                type="checkbox"
+                id="selectAll"
+                checked={selectAll}
+                onChange={handleSelectAllChange}
+              />
+              <label htmlFor="selectAll" className="ms-2">Select All</label>
+              <Button variant="outline-secondary" className="ms-3" onClick={handleUpdateSelected}>
+                Update Selected
+              </Button>
+            </Col>
+          </Row> */}
           <Row>
             <Col>
-              <Table bordered hover responsive className="w-100">
+              <Table bordered hover responsive className="w-100 data-table">
                 <thead>
                   <tr>
                     <th>Select</th>
+                    <th>Warehouse ID</th>
                     <th>SKU ID</th>
-                    <th>Product ID</th>
+                    <th>Total available</th>
                     <th>Product Name</th>
                     <th>Category</th>
                     <th>Description</th>
@@ -274,6 +288,7 @@ const AdjustInventory = () => {
         </Col>
       </Row>
     </Container>
+    </div>
   );
 };
 

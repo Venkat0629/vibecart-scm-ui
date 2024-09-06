@@ -60,6 +60,7 @@ const Login = ({ onLogin }) => {
 
   return (
     <div className="login-container d-flex justify-content-center align-items-center ">
+      
       <div className="login-card border rounded p-4">
         <h2 className="text-center mb-4 login-title">Login</h2>
         <form onSubmit={handleSubmit}>
@@ -91,7 +92,7 @@ const Login = ({ onLogin }) => {
             {errors.password && <div className="invalid-feedback">{errors.password}</div>}
           </div>
 
-          <div className="mb-3 form-group">
+          {/* <div className="mb-3 form-group">
             <label htmlFor="role" className="form-label">User Role</label>
             <select
               id="role"
@@ -103,7 +104,7 @@ const Login = ({ onLogin }) => {
               <option value="user">User</option>
               <option value="admin">Admin</option>
             </select>
-          </div>
+          </div> */}
         
           <button
             type="submit"

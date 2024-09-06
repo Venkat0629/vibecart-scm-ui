@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchOrders, updateOrderOnServer } from '../ReduxToolkit/OrderSlice';
-import { Container, Row, Col, Button, Table, InputGroup, FormControl, Form } from 'react-bootstrap';
+import { fetchOrders, cancelOrder } from '../ReduxToolkit/OrderSlice'; 
+import { Container, Row, Col, Button, Table, InputGroup, FormControl } from 'react-bootstrap';
 
 const OrderUpdate = () => {
   const dispatch = useDispatch();
   const orderData = useSelector((state) => state.orders.orderData);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectAll, setSelectAll] = useState(false);
-  const [editingOrderId, setEditingOrderId] = useState(null);
-  const [editableFields, setEditableFields] = useState({ orderStatus: '' });
   const [filteredData, setFilteredData] = useState([]);
+  const [disabledOrders, setDisabledOrders] = useState([]); 
+  const [cancelAllDisabled, setCancelAllDisabled] = useState(false);
 
   useEffect(() => {
     dispatch(fetchOrders());
@@ -36,17 +36,6 @@ const OrderUpdate = () => {
     );
   };
 
-  const handleUpdateSelected = () => {
-    const selectedOrders = filteredData.filter((item) => item.selected);
-    selectedOrders.forEach((order) => {
-      dispatch(updateOrderOnServer(order))
-        .then(() => {
-          dispatch(fetchOrders());
-        })
-        .catch((error) => console.error('Error updating order:', error));
-    });
-  };
-
   const handleCheckboxChange = (orderId) => {
     setFilteredData((prevData) =>
       prevData.map((item) =>
@@ -55,174 +44,156 @@ const OrderUpdate = () => {
     );
   };
 
-  const handleEdit = (orderId) => {
-    setEditingOrderId(orderId);
-    const itemToEdit = filteredData.find((item) => item.orderId === orderId);
-    setEditableFields({ orderStatus: itemToEdit.orderStatus });
+  const handleCancelOrder = (orderId, orderStatus) => {
+    if (orderStatus === 'CONFIRMED' || orderStatus === 'DISPATCHED') {
+      dispatch(cancelOrder(orderId))
+        .then(() => {
+          setDisabledOrders((prev) => [...prev, orderId]); 
+          alert('Order has been canceled successfully');
+          dispatch(fetchOrders()); 
+        })
+        .catch((error) => console.error('Error canceling order:', error));
+    } else {
+      alert(`Unable to cancel order because it is already ${orderStatus.replace(/_/g, ' ').toLowerCase()}.`);
+    }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditableFields((prevFields) => ({ ...prevFields, [name]: value }));
-  };
-
-  const handleUpdate = () => {
-    const updatedOrder = {
-      orderId: editingOrderId,
-      orderStatus: editableFields.orderStatus,
-    };
-
-    dispatch(updateOrderOnServer(updatedOrder))
-      .then(() => {
-        dispatch(fetchOrders());
-        setEditingOrderId(null);
-        setEditableFields({ orderStatus: '' });
-        alert('Order status updated successfully');
-      })
-      .catch((error) => console.error('Error updating order:', error));
+  const handleCancelAll = () => {
+    const selectedOrders = filteredData.filter((item) => item.selected);
+    if (selectedOrders.length > 0) {
+      Promise.all(
+        selectedOrders.map((item) => {
+          if (item.orderStatus === 'CONFIRMED' || item.orderStatus === 'DISPATCHED') {
+            return dispatch(cancelOrder(item.orderId))
+              .then(() => item.orderId)
+              .catch((error) => console.error('Error canceling order:', error));
+          } else {
+            alert(`Unable to cancel order ID ${item.orderId} because it is already ${item.orderStatus.replace(/_/g, ' ').toLowerCase()}.`);
+            return Promise.reject();
+          }
+        })
+      )
+        .then((canceledOrderIds) => {
+          setDisabledOrders((prev) => [...prev, ...canceledOrderIds]); 
+          setCancelAllDisabled(true); 
+          alert('Selected orders have been canceled successfully');
+          dispatch(fetchOrders()); 
+        })
+        .catch(() => {
+          alert('Error canceling some orders');
+        });
+    } else {
+      alert('No orders selected for cancellation');
+    }
   };
 
   return (
-    <Container fluid className="p-4">
-      <Row>
-        <Col md={12}>
-          <Row className="mb-4">
-            <Col md={4}>
-              <InputGroup>
-                <FormControl
-                  placeholder="Search by Order ID"
-                  aria-label="Search by Order ID"
-                  value={searchTerm}
-                  onChange={handleSearchChange}
+    <div className='content-section'>
+      <Container fluid className="p-4">
+        <Row>
+          <Col md={12}>
+            <Row className="mb-4">
+              <Col md={4}>
+                <InputGroup style={{ border: '1px solid black', borderRadius: '7px', overflow: 'hidden' }}>
+                  <FormControl
+                    placeholder="Search by Order ID"
+                    aria-label="Search by Order ID"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                  />
+                  <Button variant="outline-secondary" onClick={handleSearch}>
+                    Search
+                  </Button>
+                </InputGroup>
+              </Col>
+              <Col className="d-flex justify-content-end align-items-center">
+                <input
+                  type="checkbox"
+                  id="selectAll"
+                  checked={selectAll}
+                  onChange={handleSelectAllChange}
                 />
-                <Button variant="outline-secondary" onClick={handleSearch}>
-                  Search
+                <label htmlFor="selectAll" className="ms-2">Select All</label>
+                <Button
+                  variant="outline-secondary"
+                  className="ms-3"
+                  onClick={handleCancelAll}
+                  disabled={cancelAllDisabled}
+                  style={{ backgroundColor: '#dd1e25', color: '#fff', border: 'none' }}
+                >
+                  Cancel ALL
                 </Button>
-              </InputGroup>
-            </Col>
-          </Row>
-          <Row className="mb-3">
-            <Col className="d-flex justify-content-end align-items-center">
-              <input
-                type="checkbox"
-                id="selectAll"
-                checked={selectAll}
-                onChange={handleSelectAllChange}
-              />
-              <label htmlFor="selectAll" className="ms-2">Select All</label>
-              <Button variant="outline-secondary" className="ms-3" onClick={handleUpdateSelected}>
-                Update ALL
-              </Button>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Table bordered hover responsive className="w-100">
-                <thead>
-                  <tr>
-                    <th>Select</th>
-                    <th>Order ID</th>
-                    <th>SKU ID</th>
-                    <th>Product Name</th>
-                    {/* <th>Category Name</th>
-                    <th>Size</th>
-                    <th>Color</th> */}
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Total Price</th>
-                    {/* <th>Discounted Price</th>
-                    <th>Coupon Used</th> */}
-                    <th>Payment Method</th>
-                    <th>Customer Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Shipping Address</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>Pincode</th>
-                    <th>Order Status</th>
-                    <th>Action</th>
-                    
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredData.length > 0 ? (
-                    filteredData.map((item) => (
-                      <tr key={item.orderId}>
-                        <td>
-                          <input
-                            type="checkbox"
-                            checked={item.selected || false}
-                            onChange={() => handleCheckboxChange(item.orderId)}
-                          />
-                        </td>
-                        <td>{item.orderId}</td>
-                        <td>{item.skuId}</td>
-                        <td>{item.productName}</td>
-                        {/* <td>{item.categoryName || ''}</td>
-                        <td>{item.size || ''}</td>
-                        <td>{item.color || ''}</td> */}
-                        <td>{item.quantity}</td>
-                        <td>{item.unitPrice}</td>
-                        <td>{item.totalPrice}</td>
-                        
-                        <td>{item.paymentMethod}</td>                        
-                        <td>{item.name}</td>
-                        <td>{item.email}</td>
-                        <td>{item.phone}</td>
-                        <td>{item.address}</td>
-                        <td>{item.city}</td>
-                        <td>{item.state}</td>
-                        <td>{item.pincode}</td>
-                        <td>
-                          {editingOrderId === item.orderId ? (
-                            <Form.Control
-                              as="select"
-                              name="orderStatus"
-                              value={editableFields.orderStatus}
-                              onChange={handleInputChange}
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Table bordered hover responsive className="w-100 data-table">
+                  <thead>
+                    <tr>
+                      <th>Select</th>
+                      <th>Order ID</th>
+                      <th>Order Total</th>
+                      <th>Payment Method</th>
+                      <th>Customer Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Address</th>
+                      <th>City</th>
+                      <th>State</th>
+                      <th>Pincode</th>
+                      <th>Order Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredData.length > 0 ? (
+                      filteredData.map((item) => (
+                        <tr key={item.orderId}>
+                          <td>
+                            <input
+                              type="checkbox"
+                              checked={item.selected || false}
+                              onChange={() => handleCheckboxChange(item.orderId)}
+                            />
+                          </td>
+                          <td>{item.orderId}</td>
+                          <td>{item.totalPrice}</td>
+                          <td>{item.paymentMethod}</td>
+                          <td>{item.name}</td>
+                          <td>{item.email}</td>
+                          <td>{item.phone}</td>
+                          <td>{item.address}</td>
+                          <td>{item.city}</td>
+                          <td>{item.state}</td>
+                          <td>{item.pincode}</td>
+                          <td>{item.orderStatus}</td>
+                          <td>
+                            <Button
+                              variant='outline-danger' 
+                              onClick={() => handleCancelOrder(item.orderId, item.orderStatus)}
+                              disabled={disabledOrders.includes(item.orderId) || item.orderStatus === 'CANCELLED'}
+                              style={{ backgroundColor: '#dd1e25', color: '#fff', border: 'none' }}
                             >
-                              <option value="DISPATCHED">DISPATCHED</option>
-                              <option value="PENDING">PENDING</option>
-                              <option value="ON_THE_WAY">ON_THE_WAY</option>
-                              <option value="DELIVERED">DELIVERED</option>
-                              <option value="CANCELLED">CANCELLED</option>
-                              <option value="OUT_FOR_DELIVERY">OUT_FOR_DELIVERY</option>
-                              <option value="PICKUP_COURIER">PICKUP_COURIER</option>
-                              <option value="CONFIRMED">CONFIRMED</option>
-
-                            </Form.Control>
-                          ) : (
-                            item.orderStatus
-                          )}
-                        </td>
-                        <td>
-                          {editingOrderId === item.orderId ? (
-                            <Button variant="outline-secondary" onClick={handleUpdate}>
-                              Update
+                              Cancel
                             </Button>
-                          ) : (
-                            <Button variant="outline-secondary" onClick={() => handleEdit(item.orderId)}>
-                              Edit
-                            </Button>
-                          )}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="12" className="text-center">
+                          No orders found
                         </td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="17" className="text-center">
-                        No orders found
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </Table>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </Container>
+                    )}
+                  </tbody>
+                </Table>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 

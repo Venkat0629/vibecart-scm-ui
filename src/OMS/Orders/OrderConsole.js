@@ -1,13 +1,17 @@
+
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchOrders } from '../ReduxToolkit/OrderSlice';
-import { Container, Row, Col, Table, InputGroup, FormControl, Button } from 'react-bootstrap';
+import axios from 'axios';
+import { Container, Row, Col, Table, InputGroup, FormControl, Button, Modal } from 'react-bootstrap';
 
 const OrderConsole = () => {
   const dispatch = useDispatch();
   const orderData = useSelector((state) => state.orders.orderData);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
     dispatch(fetchOrders());
@@ -26,76 +30,169 @@ const OrderConsole = () => {
     setFilteredData(filtered);
   };
 
+  const handleShowDetails = async (orderId) => {
+    try {
+      // Fetch order details from the API
+      const response = await axios.get(`http://localhost:8090/vibe-cart/orders/getOrderById/${orderId}`);
+      const orderDetails = response.data.data; // Assuming API response contains order details in data property
+      setSelectedOrder(orderDetails);
+      setShowModal(true);
+    } catch (error) {
+      console.error('Failed to fetch order details:', error);
+    }
+  };
+
+  const handleCloseModal = () => setShowModal(false);
+
   return (
-    <Container fluid className="p-4">
-      <Row className="mb-4">
-        <Col md={4}>
-          <InputGroup>
-            <FormControl
-              placeholder="Search by Order ID"
-              aria-label="Search by Order ID"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-            <Button variant="outline-secondary" onClick={handleSearch}>
-              Search
-            </Button>
-          </InputGroup>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Table bordered hover responsive className="w-100">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>SKU ID</th>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Total Price</th>
-                <th>Payment Method</th>                
-                <th>Customer Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Shipping Address</th>
-                <th>City</th>
-                <th>State</th>
-                <th>Pincode</th>
-                <th>Order Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.length > 0 ? (
-                filteredData.map((item) => (
-                  <tr key={item.orderId}>
-                    <td>{item.orderId}</td>
-                    <td>{item.skuId}</td>
-                    <td>{item.productName}</td>
-                    <td>{item.quantity}</td>
-                    <td>{item.unitPrice}</td>
-                    <td>{item.totalPrice}</td>
-                    <td>{item.paymentMethod}</td>
-                    <td>{item.name}</td>
-                    <td>{item.email}</td>
-                    <td>{item.phone}</td>
-                    <td>{item.address}</td>
-                    <td>{item.city}</td>
-                    <td>{item.state}</td>
-                    <td>{item.pincode}</td>
-                    <td>{item.orderStatus}</td>
-                  </tr>
-                ))
-              ) : (
+    <div className='content-section'>
+      <Container fluid className="p-4">
+        <Row className="mb-4">
+          <Col md={4}>
+            <InputGroup className="mb-3">
+              <FormControl
+                placeholder="Search by Order ID"
+                aria-label="Search by Order ID"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="border-dark rounded-0"
+              />
+              <Button variant="dark" onClick={handleSearch} className="rounded-0">
+                Search
+              </Button>
+            </InputGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Table bordered hover responsive className="text-center border-dark">
+              <thead className="bg-dark text-white">
                 <tr>
-                  <td colSpan="15" className="text-center">No orders found</td>
+                  <th>Order ID</th>
+                  {/* <th>SKU ID</th> */}
+                  <th>Order Total</th>
+                  <th>Payment Method</th>
                 </tr>
-              )}
-            </tbody>
-          </Table>
-        </Col>
-      </Row>
-    </Container>
+              </thead>
+              <tbody>
+                {filteredData.length > 0 ? (
+                  filteredData.map((item) => (
+                    <tr key={item.orderId} onClick={() => handleShowDetails(item.orderId)} style={{ cursor: 'pointer' }}>
+                      <td className="text-primary">{item.orderId}</td>
+                      {/* <td>{item.skuId}</td> */}
+                      <td>${item.totalPrice.toFixed(2)}</td>
+                      <td>{item.paymentMethod}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" className="text-muted">No orders found</td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+          </Col>
+        </Row>
+      </Container>
+
+      {/* Modal for Order Details */}
+      {selectedOrder && (
+        
+        <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
+        <Modal.Header closeButton className="border-0 pb-0">
+          <Modal.Title className="text-dark">Order Details - {selectedOrder.orderId}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="bg-light" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+          <Container>
+            {/* Order Items Table */}
+            <Row className="mb-3">
+              <Col>
+                <h5 style={{ textAlign: 'left', fontSize: '14px', color: '#dd1e25', marginBottom: '1rem' }} className="font-weight-bold">
+                  Order Items
+                </h5>
+                <Table bordered hover size="sm" className="text-center">
+                  <thead className="bg-light">
+                    <tr>
+                      <th>Item Name</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                      <th>Total Price</th>
+                    </tr>
+                  </thead>
+                  <tbody style={{ fontSize: '14px' }}>
+                    {selectedOrder.orderItems.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.itemName}</td>
+                        <td>{item.quantity}</td>
+                        <td>${item.price.toFixed(2)}</td>
+                        <td>${item.totalPrice.toFixed(2)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </Col>
+            </Row>
+    
+            {/* Customer Information */}
+            <Row className="mb-3">
+              <Col>
+                <h5 style={{ textAlign: 'left', fontSize: '14px', color: '#dd1e25', marginBottom: '1rem' }} className="font-weight-bold">
+                  Order Information
+                </h5>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Order Date:</strong> {new Date(selectedOrder.orderDate).toLocaleDateString()}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Total Quantity:</strong> {selectedOrder.totalQuantity}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Sub Amount:</strong> ${selectedOrder.subTotal.toFixed(2)}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Discount Price:</strong> ${selectedOrder.discountPrice.toFixed(2)}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Total Amount:</strong> ${selectedOrder.totalAmount.toFixed(2)}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Order Status:</strong> {selectedOrder.orderStatus}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Payment Status:</strong> {selectedOrder.paymentStatus}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Estimated Delivery Date:</strong> {new Date(selectedOrder.estimated_delivery_date).toLocaleDateString()}</p>
+              </Col>
+              <Col>
+                <h5 style={{ textAlign: 'left', fontSize: '14px', color: '#dd1e25', marginBottom: '1rem' }} className="font-weight-bold">
+                  Customer Information
+                </h5>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Name:</strong> {selectedOrder.customer.customerName}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Email:</strong> {selectedOrder.customer.email}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Phone Number:</strong> {selectedOrder.customer.phoneNumber}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Address:</strong> {selectedOrder.customer.customerAddress}</p>
+              </Col>
+            </Row>
+    
+            {/* Shipping Address */}
+            <Row className="mb-3">
+              <Col>
+                <h5 style={{ textAlign: 'left', fontSize: '14px', color: '#dd1e25', marginBottom: '1rem' }} className="font-weight-bold">
+                  Shipping Address
+                </h5>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Name:</strong> {selectedOrder.shippingAddress.name}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Email:</strong> {selectedOrder.shippingAddress.email}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Phone:</strong> {selectedOrder.shippingAddress.phoneNumber}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Address:</strong> {selectedOrder.shippingAddress.address}, {selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state}, {selectedOrder.shippingAddress.zipcode}</p>
+              </Col>
+    
+              {/* Billing Address */}
+              <Col>
+                <h5 style={{ textAlign: 'left', fontSize: '14px', color: '#dd1e25', marginBottom: '1rem' }} className="font-weight-bold">
+                  Billing Address
+                </h5>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Name:</strong> {selectedOrder.billingAddress.name}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Email:</strong> {selectedOrder.billingAddress.email}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Phone:</strong> {selectedOrder.billingAddress.phoneNumber}</p>
+                <p style={{ fontSize: '14px', marginBottom: '0.5rem' }}><strong>Address:</strong> {selectedOrder.billingAddress.address}, {selectedOrder.billingAddress.city}, {selectedOrder.billingAddress.state}, {selectedOrder.billingAddress.zipcode}</p>
+              </Col>
+            </Row>
+          </Container>
+        </Modal.Body>
+        <Modal.Footer className="bg-light border-0">
+          <Button variant="dark" onClick={handleCloseModal} style={{ padding: '0.5rem 1rem' }}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      
+      )}
+    </div>
   );
 };
 

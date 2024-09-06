@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+// Fetch orders
 export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
   const response = await axios.get('http://localhost:8090/vibe-cart/orders/getAllOrders');
   const orders = response.data.data || [];
@@ -8,7 +9,6 @@ export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
     orderId: order.orderId || '',
     skuId: order.orderItems?.[0]?.itemId || '',  
     productName: order.orderItems?.[0]?.itemName || '',
-    
     size: '', 
     color: '', 
     quantity: order.totalQuantity || 0,
@@ -30,14 +30,12 @@ export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
   }));
 });
 
-export const updateOrderOnServer = createAsyncThunk(
-  'orders/updateOrder',
-  async (order) => {
-    const response = await axios.put(
-      `http://localhost:8090/vibe-cart/orders/updateOrder/${order.orderId}`,
-      order
-    );
-    return response.data;
+// Cancel order
+export const cancelOrder = createAsyncThunk(
+  'orders/cancelOrder',
+  async (orderId) => {
+    await axios.delete(`http://localhost:8090/vibe-cart/orders/cancelOrder/${orderId}`);
+    return orderId;  
   }
 );
 
@@ -62,14 +60,11 @@ const orderSlice = createSlice({
         state.status = 'failed';
         state.error = action.error.message;
       })
-      .addCase(updateOrderOnServer.fulfilled, (state, action) => {
-        const updatedOrder = action.payload;
-        const existingOrderIndex = state.orderData.findIndex(
-          (order) => order.orderId === updatedOrder.orderId
+      .addCase(cancelOrder.fulfilled, (state, action) => {
+        const canceledOrderId = action.payload;
+        state.orderData = state.orderData.filter(
+          (order) => order.orderId !== canceledOrderId
         );
-        if (existingOrderIndex >= 0) {
-          state.orderData[existingOrderIndex] = updatedOrder;
-        }
       });
   },
 });

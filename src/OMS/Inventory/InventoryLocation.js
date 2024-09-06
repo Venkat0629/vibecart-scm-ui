@@ -26,12 +26,13 @@ const InventoryLocation = () => {
     const handleSearch = () => console.log('Search term:', searchTerm);
 
     return (
+        <div className='content-section'>
         <Container fluid className="p-4">
             <Row>
                 <Col md={12}>
                     <Row className="mb-4">
                         <Col md={4}>
-                            <InputGroup>
+                            <InputGroup style={{ border: '1px solid black',borderRadius: '7px', overflow: 'hidden' }}>
                                 <FormControl
                                     placeholder="Search by SKU"
                                     aria-label="Search by SKU"
@@ -48,7 +49,7 @@ const InventoryLocation = () => {
                     <Row>
                         <Col>
                             <div className='table-responsive'>
-                                <Table striped bordered hover className='table'>
+                                <Table bordered hover className='table data-table'>
                                     <thead>
                                         <tr>
                                             <th>SKU ID</th>
@@ -86,6 +87,7 @@ const InventoryLocation = () => {
                 </Col>
             </Row>
         </Container>
+        </div>
     );
 };
 

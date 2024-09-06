@@ -25,19 +25,20 @@ const InventoryConsole = () => {
   const handleSearch = () => console.log('Search term:', searchTerm);
 
   return (
-    <Container fluid className="p-4">
+    <div className='content-section'>
+    <Container fluid className="p-4 body">
       <Row>
         <Col>
           <Row className="mb-4">
             <Col md={4} sm={12}>
-              <InputGroup>
+              <InputGroup style={{ border: '1px solid black',borderRadius: '7px', overflow: 'hidden' }}>
                 <FormControl
                   placeholder="Search by SKU"
                   aria-label="Search by SKU"
                   value={searchTerm}
                   onChange={handleSearchChange}
                 />
-                <Button variant="outline-secondary" onClick={handleSearch}>
+                <Button variant="outline-secondary" onClick={handleSearch} >
                   Search
                 </Button>
               </InputGroup>
@@ -46,7 +47,7 @@ const InventoryConsole = () => {
           <Row>
             <Col>
               <div className="table-responsive">
-                <Table bordered hover className="w-100">
+                <Table bordered hover className="w-100 data-table">
                   <thead>
                     <tr>
                       <th>SKU ID</th>
@@ -82,6 +83,7 @@ const InventoryConsole = () => {
         </Col>
       </Row>
     </Container>
+    </div>
   );
 };
 

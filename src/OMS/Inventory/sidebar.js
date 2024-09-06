@@ -28,7 +28,7 @@ const Sidebar = () => {
     };
 
     return (
-        <div>
+        <div className='sidebar'>
             <div className={`sidebar ${showSidebar ? 'show' : ''}`}>
                 <button 
                     className={`sidebar-btn ${activeButton === '/dashboard' ? 'active' : ''}`} 
@@ -66,7 +66,7 @@ const Sidebar = () => {
                         </div>
                     )}
                 </div>
-                <div className="mb-2">
+                <div>
                     <button 
                         className={`sidebar-btn d-flex justify-content-between align-items-center ${showOrderLinks ? 'active' : ''}`}
                         onClick={toggleOrderLinks}
@@ -85,7 +85,7 @@ const Sidebar = () => {
                                 className={`sidebar-btn ${activeButton === '/updateOrder' ? 'active' : ''}`}
                                 onClick={() => handleButtonClick('/updateOrder')}
                             >
-                                Update Order
+                                Cancel Order
                             </button>
                         </div>
                     )}
