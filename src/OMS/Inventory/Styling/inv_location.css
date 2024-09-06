@@ -1,46 +1,56 @@
+.container {
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 20px;
+}
+
+.custom-input-group {
+  display: flex;
+  align-items: center;
+}
+
 .custom-input {
-    border-radius: 0.25rem;
-    border: 1px solid #ced4da;
-  }
-  
-  .table {
-    width: 100%;
-    margin-bottom: 1rem;
-    background-color: transparent;
-  }
-  
-  .table thead th {
-    vertical-align: bottom;
-    border-bottom: 2px solid #dee2e6;
-  }
-  
-  .table tbody + tbody {
-    border-top: 2px solid #dee2e6;
-  }
-  
-  .table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  .table-hover tbody tr:hover {
-    color: #495057;
-    background-color: rgba(0, 0, 0, 0.075);
-  }
-      
-  @media (max-width: 575.98px) {
-    .custom-input {
-      width: 100%;
-      margin-bottom: 10px;
-    }
-  
-    .btn {
-      width: 100%;
-      margin-top: 10px;
-    }
-  
-    .popup {
-      width: 90%;
-    }
-  }
-  
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f4f4f4;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination .page-item {
+  margin: 0 5px;
+}
+
+.pagination .page-link {
+  padding: 8px 16px;
+  border: 1px solid #007bff;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+}
+
+.pagination .page-link:disabled {
+  background-color: #ddd;
+  border-color: #ddd;
+  color: #aaa;
+}

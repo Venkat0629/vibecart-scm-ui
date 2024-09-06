@@ -1,36 +1,71 @@
-.table-responsive {
-    margin-top: 20px;
+.container {
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 20px;
+  }
+  
+  .search-container {
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    padding: 8px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
   }
   
   .table {
-    background-color: #f8f9fa;
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th,
+  .table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .table th {
+    background-color: #f4f4f4;
   }
   
   .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: 20px;
   }
   
-  .spinner-border {
-    width: 3rem;
-    height: 3rem;
+  .pagination button,
+  .pagination select {
+    padding: 8px 16px;
+    border: 1px solid #007bff;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 5px;
   }
   
-  .text-center {
-    margin-top: 50px;
+  .pagination button:disabled {
+    background-color: #ddd;
+    border-color: #ddd;
+    cursor: not-allowed;
   }
-  .FormControl{
-    border-right: 2px solid #dedede;
+  
+  .pagination input {
+    width: 80px;
+    padding: 8px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
   }
-  .custom-input {
-    padding: 10px; /* Adjust this to increase or decrease padding */
-    height: auto;
-}
-
-.custom-input-group {
-    margin-top: 20px; /* Add margin/padding as needed */
-    margin-bottom: 20px;
-}
-
-.table-responsive {
-    margin-top: 20px; /* Optional: to ensure space between search and table */
-}
+  
+  .pagination span {
+    margin: 0 10px;
+  }
+  

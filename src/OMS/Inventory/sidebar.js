@@ -28,7 +28,7 @@ const Sidebar = () => {
     };
 
     return (
-        <div>
+        <div style={{height:"100vh"}}>
             <div className={`sidebar ${showSidebar ? 'show' : ''}`}>
                 <button 
                     className={`sidebar-btn ${activeButton === '/dashboard' ? 'active' : ''}`} 

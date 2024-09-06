@@ -8,9 +8,8 @@ export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
     orderId: order.orderId || '',
     skuId: order.orderItems?.[0]?.itemId || '',  
     productName: order.orderItems?.[0]?.itemName || '',
-    
     size: '', 
-    color: '', 
+    color: '',
     quantity: order.totalQuantity || 0,
     unitPrice: order.orderItems?.[0]?.unitPrice || 0,
     totalPrice: order.totalAmount || 0,
