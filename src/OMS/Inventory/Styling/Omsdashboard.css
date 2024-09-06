@@ -1,0 +1,38 @@
+.falling-number {
+    position: relative;
+    font-size: 3rem;
+    animation: fallIn 2s ease-in-out forwards;
+    opacity: 0;
+}
+
+@keyframes fallIn {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    70% {
+        transform: translateY(10px);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animated-number {
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.animated-number::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: #333;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}

@@ -43,3 +43,12 @@
   background-color: #efefef !important;
   min-height: calc(100vh - 90px);
 }
+
+/* updation css */
+
+.sidebar_parent{
+  border-right: 2px solid #dedede;
+}
+.dashboard_parent{
+  background-color: rgba(0, 0, 0, 0.05);
+}
