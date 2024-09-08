@@ -1,46 +1,44 @@
-/* .sidebar-btn {
-    width: 100%;
-    text-align: left;
-    padding: 10px 15px;
-    margin-bottom: 5px;
-    font-size: 16px;
+.content-section {
+    background: #efefef;
+    padding: 0; /* Remove any default padding */
+    margin: 0;  /* Remove any default margin */
 }
 
-.sidebar .btn-link {
-    padding-left: 25px;
-    text-decoration: none;
+.container {
+    max-width: 100%; /* Make sure container takes full width */
+    padding: 0;     /* Remove container padding */
 }
 
-.sidebar .btn-outline-secondary {
-    border-radius: 0;
+.card-report, .card-pie, .card-table {
+    margin-bottom: 20px; /* Adjust spacing as needed */
 }
 
-.sidebar .btn-outline-secondary:hover,
-.sidebar .btn-outline-secondary:focus {
-   
-    border-color: #ced4da;
-}
-
-.sidebar .btn-outline-secondary.active {
-    background-color: #ced4da;
-    border-color: #adb5bd;
-} */
-/* .col-bg{
-    background-color:  rgba(0, 0, 0, 0.05);
-    height: 100%;
-} */
-/* .dashboard{
-    background-color: #efefef !important;
-} */
-.card {
-    padding-right: 0 !important;
-     /* Removes margin at the bottom */
-}
-.card-header .card-title {
-    margin-bottom: 0 !important;
-}
-
-/* Optionally, you can also ensure no padding or margins are set to the body inside cards */
 .card-body {
-    padding-right: 0 !important;
+    flex-grow: 1;
+}
+
+/* Ensuring equal height for cards */
+.card-report {
+    max-height: 200px; /* Adjust as needed */
+    overflow: hidden;
+}
+
+.card-pie, .card-table {
+    flex-grow: 1;
+}
+
+.card-pie {
+    min-height: 400px; /* Adjust as needed */
+}
+
+.card-table {
+    min-height: 400px; /* Adjust as needed */
+}
+
+/* Centering the pie chart */
+#orderPieChart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }

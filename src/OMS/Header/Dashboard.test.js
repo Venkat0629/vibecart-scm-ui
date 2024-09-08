@@ -90,7 +90,7 @@
 // });
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import Dashboard from './OMS-Dashboard';
+import Dashboard from '../Inventory/OMS-Dashboard';
 
 // Mock the global fetch API
 global.fetch = jest.fn((url) => {

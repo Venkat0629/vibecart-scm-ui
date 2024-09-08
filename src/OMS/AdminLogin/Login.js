@@ -155,7 +155,7 @@ const Login = () => {
     let isValid = true;
 
     if (!formData.email) {
-      newErrors.email = 'Username is required';
+      newErrors.email = 'Email Id is required';
       isValid = false;
     }
 
@@ -201,7 +201,7 @@ const Login = () => {
         <h2 className="login-title">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email" className="form-label">Username</label>
+            <label htmlFor="email" className="form-label">Email ID</label>
             <input
               type="text"
               className={`form-control ${errors.email ? 'error-highlight' : ''}`}

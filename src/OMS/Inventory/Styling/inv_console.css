@@ -1,71 +1,87 @@
+/* Container styling */
 .container {
-    margin: 0 auto;
-    max-width: 1200px;
-    padding: 20px;
-  }
-  
-  .search-container {
-    margin-bottom: 20px;
-  }
-  
-  .search-input {
-    padding: 8px;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .table th,
-  .table td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: left;
-  }
-  
-  .table th {
-    background-color: #f4f4f4;
-  }
-  
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  .pagination button,
-  .pagination select {
-    padding: 8px 16px;
-    border: 1px solid #007bff;
-    background-color: #007bff;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    margin: 0 5px;
-  }
-  
-  .pagination button:disabled {
-    background-color: #ddd;
-    border-color: #ddd;
-    cursor: not-allowed;
-  }
-  
-  .pagination input {
-    width: 80px;
-    padding: 8px;
-    margin: 0 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    text-align: center;
-  }
-  
-  .pagination span {
-    margin: 0 10px;
-  }
-  
+  padding: 20px;
+  background-color: #f8f9fa; /* Light background color for better contrast */
+}
+
+/* Table styling */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #ffffff; /* White background for table */
+}
+
+.table th, .table td {
+  padding: 12px; /* Padding inside table cells */
+  text-align: left;
+  border: 1px solid #dee2e6; /* Border color */
+}
+
+.table thead {
+  background-color: #343a40; /* Dark header background */
+  color: #ffffff; /* White text color in header */
+}
+
+.table th {
+  cursor: pointer; /* Pointer cursor for sortable columns */
+}
+
+.table tr:nth-child(even) {
+  background-color: #f2f2f2; /* Zebra striping */
+}
+
+/* Search input styling */
+.search-container {
+  margin-bottom: 20px;
+}
+
+.search-input {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ced4da; /* Border color for input */
+  border-radius: 4px; /* Rounded corners */
+}
+
+/* Pagination styling */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: red; /* Red background color for pagination buttons */
+  color: white; /* White text color */
+  border: none;
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px; /* Rounded corners */
+}
+
+.pagination button:disabled {
+  background-color: #ccc; /* Gray background for disabled buttons */
+  cursor: not-allowed; /* Not-allowed cursor for disabled buttons */
+}
+
+.pagination span {
+  margin: 0 10px;
+}
+
+.pagination input[type="number"] {
+  width: 80px;
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ced4da; /* Border color for input */
+  border-radius: 4px; /* Rounded corners */
+}
+
+.pagination select {
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ced4da; /* Border color for select */
+  border-radius: 4px; /* Rounded corners */
+}

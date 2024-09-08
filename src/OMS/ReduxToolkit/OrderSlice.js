@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import API_URLS from '../config';
 
 // Fetch orders
 export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
-  const response = await axios.get('http://localhost:8090/vibe-cart/orders/getAllOrders');
+  const response = await axios.get(API_URLS.getAllOrders);
   const orders = response.data.data || [];
   return orders.map((order) => ({
     orderId: order.orderId || '',
@@ -34,7 +35,7 @@ export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
 export const cancelOrder = createAsyncThunk(
   'orders/cancelOrder',
   async (orderId) => {
-    await axios.delete(`http://localhost:8090/vibe-cart/orders/cancelOrder/${orderId}`);
+    await axios.delete(API_URLS.cancelOrder(orderId));
     return orderId;  
   }
 );

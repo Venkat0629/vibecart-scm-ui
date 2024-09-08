@@ -1,56 +1,34 @@
-.container {
-  margin: 0 auto;
-  max-width: 1200px;
-  padding: 20px;
+/* Ensure the container and row take full height */
+.h-100 {
+  height: 100%;
 }
 
-.custom-input-group {
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: auto;
+}
+
+/* Center pagination controls */
+.pagination-controls {
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 10px;
 }
 
-.custom-input {
-  border-radius: 4px;
-  box-sizing: border-box;
+.pagination-controls button {
+  background-color: red;
+  color: white;
 }
 
 .table {
-  width: 100%;
-  border-collapse: collapse;
+  min-height: 300px; /* Adjust this as needed */
+  font-size: 0.875rem; /* Smaller font size for compact table */
 }
 
-.table th,
-.table td {
-  padding: 12px;
-  border: 1px solid #ddd;
-  text-align: left;
-}
-
-.table th {
-  background-color: #f4f4f4;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.pagination .page-item {
-  margin: 0 5px;
-}
-
-.pagination .page-link {
-  padding: 8px 16px;
-  border: 1px solid #007bff;
-  background-color: #007bff;
-  color: white;
-  border-radius: 4px;
-}
-
-.pagination .page-link:disabled {
-  background-color: #ddd;
-  border-color: #ddd;
-  color: #aaa;
+.table td, .table th {
+  padding: 0.5rem; /* Smaller padding for compact cells */
 }
