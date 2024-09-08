@@ -25,25 +25,33 @@ const Dashboard = () => {
                         'Content-Type': 'application/json',
                     },
                 });
-
+        
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
+        
                 const result = await response.json();
-
+        
                 if (result.success) {
                     setOrders(result.data);
-
+        
                     const total = result.data.length;
+        
+                    // Filtering and counting
                     const processed = result.data.filter(order => order.orderStatus !== 'CANCELLED').length;
-                    const completed = result.data.filter(order => order.orderStatus === 'DELIVERED').length;
-
+                    const completed = result.data.filter(order => order.orderStatus.toUpperCase() === 'DELIVERED').length;
+        
+                    // If 'DELIVERED' has any spaces or other issues, check with a different method
+                    console.log('Filtered Completed Orders:', result.data.filter(order => order.orderStatus.toUpperCase() === 'DELIVERED'));
+        
+                    // Calculate remaining orders as those that are not processed or completed
+                    const cancelled = total - processed;
+        
                     setTotalOrders(total);
                     setProcessedOrders(processed);
                     setCompletedOrders(completed);
-
-                    createPieChart('orderPieChart', processed, completed, total - processed - completed);
+        
+                    createPieChart('orderPieChart', processed, completed, cancelled);
                 } else {
                     throw new Error('Unexpected response structure');
                 }
@@ -51,10 +59,11 @@ const Dashboard = () => {
                 console.error('Error fetching orders:', error);
             }
         };
+        
 
         const fetchInventoryData = async () => {
             try {
-                const response = await fetch('http://localhost:8090/vibe-cart/inventory/get-all-inventories', {
+                const response = await fetch('http://localhost:8090/vibe-cart/inventory/inventory-report', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -201,8 +210,8 @@ const Dashboard = () => {
 
     return (
         <div className='content-section'>
-            <Container fluid className="p-4">
-                <Row>                        
+            <Container>
+                <Row className='mt-1'>                        
                     <Col md={6}>
                         <Card className='text-center mb-4'>
                             <Card.Header>

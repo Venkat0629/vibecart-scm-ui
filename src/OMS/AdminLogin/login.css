@@ -6,7 +6,7 @@
   min-width: 400px;
   padding: 20px;
   border-radius: var(--border-radius);
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: var(--card-background-color);
   margin-top: 100px;
 }

@@ -171,7 +171,9 @@ const OrderUpdate = () => {
                             <Button
                               variant='outline-danger' 
                               onClick={() => handleCancelOrder(item.orderId, item.orderStatus)}
-                              disabled={disabledOrders.includes(item.orderId) || item.orderStatus === 'CANCELLED'}
+                              disabled={disabledOrders.includes(item.orderId) || 
+                                        item.orderStatus === 'CANCELLED' ||
+                                        !(item.orderStatus === 'CONFIRMED' || item.orderStatus === 'DISPATCHED')}
                               style={{ backgroundColor: '#dd1e25', color: '#fff', border: 'none' }}
                             >
                               Cancel
@@ -181,7 +183,7 @@ const OrderUpdate = () => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="12" className="text-center">
+                        <td colSpan="13" className="text-center">
                           No orders found
                         </td>
                       </tr>

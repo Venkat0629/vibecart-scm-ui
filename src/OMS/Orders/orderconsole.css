@@ -25,11 +25,3 @@
   }
    */
    /* Remove hover animation and add background color on hover */
-.order-row.stylefororderconsole {
-    transition: background-color 0.3s ease; /* Smooth transition for background color */
-  }
-  
-  .order-row.stylefororderconsole:hover {
-    background-color: #f0fff1; /* Light blue background color on hover */
-  }
-  

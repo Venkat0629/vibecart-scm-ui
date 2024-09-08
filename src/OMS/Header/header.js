@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { FaUser } from 'react-icons/fa';
+import { FaRegUserCircle } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './header.css';
 
-const Header = ({ onLogout, isLoggedIn }) => {
+const Header = ({ onLogout, isLoggedIn, isLoginPage }) => {
     const [username, setUsername] = useState('');
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -28,7 +28,8 @@ const Header = ({ onLogout, isLoggedIn }) => {
                 <span className='bold'>VIBE</span><span>CART</span>
             </div>
 
-            <div className="header-subtitle">
+            {/* Apply additional class based on whether it is the login page */}
+            <div className={`header-subtitle ${isLoginPage ? 'login-subtitle' : ''}`}>
                 <h5>Order Management System</h5>
             </div>
 
@@ -39,7 +40,7 @@ const Header = ({ onLogout, isLoggedIn }) => {
                         onClick={toggleDropdown} 
                         style={{ display: "flex", flexDirection: "column" }}
                     >
-                        <FaUser aria-label="user" className="user-icon red-outline" size={24} />
+                        <FaRegUserCircle className="user-icon" size={30} color='#dd1e25'/>
                         <div className={`dropdown-menu ${dropdownOpen ? 'show' : ''}`}>
                             <div className="dropdown-header">Account Details</div>
                             <a href="#" className="dropdown-item">{username}</a>

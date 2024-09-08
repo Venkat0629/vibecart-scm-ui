@@ -2,10 +2,17 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 10px 15px;
+    /* padding-left: 15px;
+    padding-right: 15px; */
     background-color: #fff;
     border-bottom: 1px solid #dedede;
-    position: relative; 
+    border-top: 1px solid #dedede; /* Add border to the top of the header */
+    position: fixed; /* Make the header fixed */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Ensure it stays on top of other content */
 }
 
 .header-title {
@@ -21,41 +28,23 @@
 .header-subtitle {
     flex-grow: 1;
     display: flex;
-    justify-content: center;
+    justify-content: center !important;
     align-items: center;
+    margin-right: 120px;
     width: 100%;
 }
 
 h5 {
-    margin: 0; 
-    /* margin-left: 100px; */
+    margin: 0;
     text-align: center; 
 }
-
+.login-subtitle {
+    margin-right: 120px; /* Apply margin right only on login page */
+}
 .header-actions {
     position: relative;
     display: flex;
     align-items: center;
-}
-
-.user-info {
-    cursor: pointer;
-    border: 1px solid red; 
-    border-radius: 50%; 
-    padding: 5px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.user-icon {
-    color: #333;
-}
-
-.user-icon.red-outline {
-    color: red;
-    font-size: 24px;
-    text-shadow: 1px 1px 0 red, -1px -1px 0 red, -1px 1px 0 red, 1px -1px 0 red;
 }
 
 .dropdown-menu {
@@ -93,9 +82,10 @@ h5 {
     background-color: #f4f4f4;
 }
 
+/* Media Queries */
 @media (max-width: 768px) {
     .header-container {
-        flex-direction: row; 
+        flex-direction: row;
         padding: 10px;
     }
 
@@ -105,7 +95,7 @@ h5 {
     }
 
     .header-subtitle {
-        order: 1; 
+        order: 1;
         text-align: center;
         flex-grow: 1;
     }
@@ -113,16 +103,16 @@ h5 {
     h5 {
         font-size: 1rem;
         font-weight: 400;
-        margin: 0; 
+        margin: 0;
     }
 
     .header-actions {
         margin-top: 0;
-        order: 2; 
+        order: 2;
     }
 
     .user-info {
-        margin-left: auto; 
+        margin-left: auto;
     }
 }
 
@@ -130,10 +120,15 @@ h5 {
     .header-title {
         font-size: 1em;
         order: 0;
-        flex-grow: 0; 
+        flex-grow: 0;
     }
 
     .header-subtitle h5 {
         font-size: 0.9rem;
     }
+}
+
+/* Body padding to avoid content hidden under the header */
+body {
+    padding-top: 60px; /* Adjust padding to match the height of the fixed header */
 }
