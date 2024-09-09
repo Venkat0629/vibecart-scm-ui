@@ -8,13 +8,18 @@ const Header = ({ onLogout, isLoggedIn, isLoginPage }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     useEffect(() => {
+        
         const storedUsername = localStorage.getItem('email');
         if (storedUsername) {
             setUsername(storedUsername);
+        } else {
+            setUsername(''); 
         }
-    }, []);
+    }, [isLoggedIn]); 
 
     const handleLogout = () => {
+        localStorage.removeItem('email'); 
+        localStorage.removeItem('token');
         onLogout();
     };
 
@@ -28,7 +33,6 @@ const Header = ({ onLogout, isLoggedIn, isLoginPage }) => {
                 <span className='bold'>VIBE</span><span>CART</span>
             </div>
 
-           
             <div className={`header-subtitle ${isLoginPage ? 'login-subtitle' : ''}`}>
                 <h5>Order Management System</h5>
             </div>
@@ -43,7 +47,7 @@ const Header = ({ onLogout, isLoggedIn, isLoginPage }) => {
                         <FaRegUserCircle className="user-icon" size={30} color='#dd1e25'/>
                         <div className={`dropdown-menu ${dropdownOpen ? 'show' : ''}`}>
                             <div className="dropdown-header">Account Details</div>
-                            <a href="#" className="dropdown-item">{username}</a>
+                            <a href="#" className="dropdown-item">{username || 'User'}</a> 
                             <a href="#" className="dropdown-item">Settings</a>
                             <a href="#" className="dropdown-item" onClick={handleLogout}>Sign out</a>
                         </div>

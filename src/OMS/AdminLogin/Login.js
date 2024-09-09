@@ -115,7 +115,7 @@ const Login = () => {
           </div>
           
           <button type="submit" className="login-button">Login</button>
-          {errors.auth && <div className="error-message">{errors.auth}</div>}
+          {/* {errors.auth && <div className="error-message">{errors.auth}</div>} */}
         </form>
       </div>
     </div>

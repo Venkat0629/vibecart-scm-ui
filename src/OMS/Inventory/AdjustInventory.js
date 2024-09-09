@@ -82,7 +82,7 @@ const AdjustInventory = () => {
     page,
     canPreviousPage,
     canNextPage,
-    pageOptions,
+    
     gotoPage,
     nextPage,
     previousPage,
@@ -162,7 +162,7 @@ const AdjustInventory = () => {
   };
 
   return (
-    <Container fluid className="p-4">
+    <Container fluid className="mt-4">
       <Row className="mb-4">
         <Col md={4} className="custom-input-group">
           <InputGroup style={{ border: '0px solid #dedede', borderRadius: '9px 9px' }}>

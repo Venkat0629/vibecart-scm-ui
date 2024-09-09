@@ -30,7 +30,7 @@ const OrderConsole = () => {
     try {
       // Fetch order details from the API
       const response = await axios.get(`http://10.3.45.15:4001/vibe-cart/scm/orders/getOrderById/${orderId}`);
-      const orderDetails = response.data.data; // Assuming API response contains order details in data property
+      const orderDetails = response.data.data;
       setSelectedOrder(orderDetails);
       setShowModal(true);
     } catch (error) {
@@ -53,7 +53,7 @@ const OrderConsole = () => {
 
   return (
     <div className='content-section'>
-      <Container fluid className="p-4">
+      <Container fluid className="mt-4">
         <Row className="mb-4">
           <Col md={4} className="custom-input-group">
             <InputGroup style={{ border: "0px solid #dedede", borderRadius: "9px 9px" }}>

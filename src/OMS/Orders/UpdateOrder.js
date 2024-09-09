@@ -89,7 +89,7 @@ const OrderUpdate = () => {
 
   return (
     <div className='content-section'>
-      <Container fluid className="p-4">
+      <Container fluid className="mt-4">
         <Row>
           <Col md={12}>
             <Row className="mb-4">

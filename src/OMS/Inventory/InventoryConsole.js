@@ -65,7 +65,7 @@ const InventoryConsole = () => {
     page,
     canPreviousPage,
     canNextPage,
-    pageOptions,
+   
     gotoPage,
     nextPage,
     previousPage,
@@ -98,7 +98,7 @@ const InventoryConsole = () => {
   };
 
   return (
-    <div fluid className="p-4" style={{ marginBottom: '150px' }}> {/* Adjust height above footer */}
+    <div fluid className="mt-3" style={{ marginBottom: '150px' }}> {/* Adjust height above footer */}
       <Row className="mb-4">
         <Col md={4} className="custom-input-group">
           <InputGroup style={{ border: "0px solid #dedede", borderRadius: "9px 9px" }}>
