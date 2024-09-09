@@ -1,6 +1,7 @@
 .login-container {
   margin: auto;
   background-color: var(--background-color) !important;
+  background-image: url('https://tailwindui.com/img/beams-cover@95.jpg');
 }
 .login-card {
   min-width: 400px;

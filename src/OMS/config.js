@@ -6,7 +6,9 @@ const API_URLS = {
 
     getAllOrders: 'http://localhost:8090/vibe-cart/orders/getAllOrders',
     getInventoryReport: 'http://localhost:8090/vibe-cart/inventory/inventory-report',
-    cancelOrder: (orderId) => `http://localhost:8090/vibe-cart/orders/cancelOrder/${orderId}`
+    cancelOrder: (orderId) => `http://localhost:8090/vibe-cart/orders/cancelOrder/${orderId}`,
+
+    validateAccount: 'http://localhost:6601/api/v1/vibe-cart/accounts/validate'
 
   };
   

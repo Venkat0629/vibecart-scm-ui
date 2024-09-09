@@ -157,11 +157,11 @@ const Dashboard = () => {
                                     </div>
                                     <div>
                                         <h2>{completedOrders}</h2>
-                                        <p>Orders Completed</p>
+                                        <p>Completed Orders</p>
                                     </div>
                                     <div>
                                         <h2>{cancelledOrdersCount}</h2>
-                                        <p>Orders Cancelled</p>
+                                        <p>Cancelled Orders</p>
                                     </div>
                                 </div>
                             </Card.Body>
