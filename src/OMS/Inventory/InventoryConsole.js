@@ -1,19 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTable, usePagination, useSortBy } from 'react-table';
 import { Button, FormControl, InputGroup, Row, Col } from 'react-bootstrap';
-import axios from 'axios';  // Import axios
-import API_URLS from '../config';  // Import API URLs from config
+import axios from 'axios';
+import API_URLS from '../config';
 import './Styling/inv_console.css'; // Ensure this path is correct
 
 const InventoryConsole = () => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [pageRange, setPageRange] = useState([1, 2, 3]); // State for dynamic page numbers
 
   // Fetch data from API using axios
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(API_URLS.getAllInventories);  // Using axios and API_URLS
+        const response = await axios.get(API_URLS.getAllInventories);
         const result = response.data;
 
         if (result.success) {
@@ -38,22 +39,10 @@ const InventoryConsole = () => {
   // Columns definition
   const columns = useMemo(
     () => [
-      {
-        Header: 'SKU ID',
-        accessor: 'skuId',
-      },
-      {
-        Header: 'Available Quantity',
-        accessor: 'availableQty',
-      },
-      {
-        Header: 'Reserved Quantity',
-        accessor: 'reservedQty',
-      },
-      {
-        Header: 'Total Quantity',
-        accessor: 'totalQty',
-      },
+      { Header: 'SKU ID', accessor: 'skuId' },
+      { Header: 'Available Quantity', accessor: 'availableQty' },
+      { Header: 'Reserved Quantity', accessor: 'reservedQty' },
+      { Header: 'Total Quantity', accessor: 'totalQty' },
     ],
     []
   );
@@ -77,12 +66,10 @@ const InventoryConsole = () => {
     canPreviousPage,
     canNextPage,
     pageOptions,
-    pageCount,
     gotoPage,
     nextPage,
     previousPage,
-    setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex },
   } = useTable(
     {
       columns,
@@ -93,12 +80,28 @@ const InventoryConsole = () => {
     usePagination
   );
 
+  // Update page numbers dynamically
+  const handlePageChange = (action) => {
+    if (action === 'next' && canNextPage) {
+      nextPage();
+      setPageRange((prevRange) =>
+        prevRange.map((num) => num + 1)
+      );
+    } else if (action === 'previous' && canPreviousPage) {
+      previousPage();
+      // Ensure that the page numbers do not go below 1
+      setPageRange((prevRange) => {
+        const newRange = prevRange.map((num) => (num - 1 >= 1 ? num - 1 : num)); 
+        return newRange[0] === 1 ? [1, 2, 3] : newRange;
+      });
+    }
+  };
+
   return (
-    <div className="container">
-      <h3 className="mt-3 mb-3">Inventory Console</h3>
+    <div fluid className="p-4" style={{ marginBottom: '150px' }}> {/* Adjust height above footer */}
       <Row className="mb-4">
         <Col md={4} className="custom-input-group">
-          <InputGroup>
+          <InputGroup style={{ border: "0px solid #dedede", borderRadius: "9px 9px" }}>
             <FormControl
               placeholder="Search by SKU ID"
               aria-label="Search by SKU ID"
@@ -106,7 +109,7 @@ const InventoryConsole = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="custom-input"
             />
-            <Button variant="outline-secondary" onClick={() => console.log('Search term:', searchTerm)}>
+            <Button className='bg-secondary text-white btn btn-light' onClick={() => console.log('Search term:', searchTerm)}>
               Search
             </Button>
           </InputGroup>
@@ -121,11 +124,7 @@ const InventoryConsole = () => {
                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render('Header')}
                   <span>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? ' 🔽'
-                        : ' 🔼'
-                      : ''}
+                    {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
                   </span>
                 </th>
               ))}
@@ -146,46 +145,41 @@ const InventoryConsole = () => {
         </tbody>
       </table>
 
-      {/* Pagination Controls */}
-      <div className="pagination">
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {'<<'}
-        </button>
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {'<'}
-        </button>
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
-          {'>'}
-        </button>
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {'>>'}
-        </button>
-        <span>
-          Page <strong>{pageIndex + 1} of {pageOptions.length}</strong>
-        </span>
-        <span>
-          | Go to page:
-          <input
-            type="number"
-            defaultValue={pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              gotoPage(page);
-            }}
-            style={{ width: '100px' }}
-          />
-        </span>
-        <select
-          value={pageSize}
-          onChange={(e) => setPageSize(Number(e.target.value))}
-        >
-          {[5, 10, 20].map((size) => (
-            <option key={size} value={size}>
-              Show {size}
-            </option>
+      {/* Updated Pagination Controls */}
+      <nav aria-label="Page navigation example">
+        <ul className="pagination justify-content-center">
+          <li className={`page-item ${!canPreviousPage ? 'disabled' : ''}`}>
+            <button
+              className="page-link"
+              style={{ color: '#dd1e25' }}
+              onClick={() => handlePageChange('previous')}
+              disabled={!canPreviousPage}
+            >
+              Previous
+            </button>
+          </li>
+          {pageRange.map((num) => (
+            <li key={num} className={`page-item ${pageIndex + 1 === num ? 'active' : ''}`}>
+              <button
+                className={`page-link ${pageIndex + 1 === num ? 'active-page' : ''}`}
+                onClick={() => gotoPage(num - 1)}
+              >
+                {num}
+              </button>
+            </li>
           ))}
-        </select>
-      </div>
+          <li className={`page-item ${!canNextPage ? 'disabled' : ''}`}>
+            <button
+              className="page-link"
+              style={{ color: '#dd1e25' }}
+              onClick={() => handlePageChange('next')}
+              disabled={!canNextPage}
+            >
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
   );
 };

@@ -28,7 +28,7 @@ const Header = ({ onLogout, isLoggedIn, isLoginPage }) => {
                 <span className='bold'>VIBE</span><span>CART</span>
             </div>
 
-            {/* Apply additional class based on whether it is the login page */}
+           
             <div className={`header-subtitle ${isLoginPage ? 'login-subtitle' : ''}`}>
                 <h5>Order Management System</h5>
             </div>

@@ -47,7 +47,8 @@
 /* updation css */
 
 .sidebar_parent{
-  border-right: 2px solid #dedede;
+    border-right: 2px solid #dedede;
+    padding-right: 0px;
 }
 .dashboard_parent{
   background-color: rgba(0, 0, 0, 0.05);

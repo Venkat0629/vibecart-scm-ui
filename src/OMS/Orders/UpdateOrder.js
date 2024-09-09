@@ -20,11 +20,11 @@ const OrderUpdate = () => {
     setFilteredData(orderData);
   }, [orderData]);
 
-  const handleSearchChange = (e) => setSearchTerm(e.target.value);
-
-  const handleSearch = () => {
+  const handleSearchChange = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
     const filtered = orderData.filter((item) =>
-      item.orderId.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      item.orderId.toString().toLowerCase().includes(term.toLowerCase())
     );
     setFilteredData(filtered);
   };
@@ -94,16 +94,16 @@ const OrderUpdate = () => {
           <Col md={12}>
             <Row className="mb-4">
               <Col md={4}>
-                <InputGroup style={{ border: '1px solid black', borderRadius: '7px', overflow: 'hidden' }}>
+                <InputGroup style={{border:"0px solid #dedede", borderRadius:"9px 9px" }}>
                   <FormControl
                     placeholder="Search by Order ID"
                     aria-label="Search by Order ID"
                     value={searchTerm}
                     onChange={handleSearchChange}
                   />
-                  <Button variant="outline-secondary" onClick={handleSearch}>
-                    Search
-                  </Button>
+                  <Button className='bg-secondary text-white  btn btn-light '  onClick={() => console.log('Search term:', searchTerm)}>
+                Search
+              </Button>
                 </InputGroup>
               </Col>
               <Col className="d-flex justify-content-end align-items-center">

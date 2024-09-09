@@ -11,21 +11,23 @@
 }
 
 /* Center pagination controls */
-.pagination-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  margin-top: 10px;
+.pagination .page-link {
+  color: #dd1e25;
+  border: none;
+  outline: none;
 }
 
-.pagination-controls button {
-  background-color: red;
-  color: white;
+.pagination .page-link:hover {
+  text-decoration: underline;
 }
 
+.pagination .active .page-link {
+  text-decoration: underline;
+  color: #dd1e25;
+  background-color: white; /* Remove background color */
+  border: none; /* Remove border */
+}
 .table {
-  min-height: 300px; /* Adjust this as needed */
   font-size: 0.875rem; /* Smaller font size for compact table */
 }
 

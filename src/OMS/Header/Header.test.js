@@ -3,21 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Header from './header';
 
-
-// beforeAll(() => {
-//   Object.defineProperty(window, 'localStorage', {
-//     value: {
-//       getItem: jest.fn((key) => {
-//         if (key === 'username') return 'TestUser';
-//         return null;
-//       }),
-//       setItem: jest.fn(),
-//       clear: jest.fn(),
-//     },
-//     writable: true
-//   });
-// });
-
 describe('Header Component', () => {
   test('renders header with title and subtitle', () => {
     render(<Header isLoggedIn={false} />);

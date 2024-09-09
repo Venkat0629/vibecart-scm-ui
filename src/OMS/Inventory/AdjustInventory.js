@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useTable, usePagination, useSortBy } from 'react-table';
 import { Container, Row, Col, Table, Button, Modal, FormControl, InputGroup, Alert } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import './Styling/inv_console.css'; // Ensure this path is correct
-import "../config"
+import "../config";
 import API_URLS from '../config';
+
 const AdjustInventory = () => {
   const [inventoryData, setInventoryData] = useState([]);
-  const [sortOrder, setSortOrder] = useState({ field: null, order: 'asc' });
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(7); // Default to 10 rows per page
+  const [pageRange, setPageRange] = useState([1, 2, 3]); // State for dynamic page numbers
 
   // Modal state
   const [selectedRow, setSelectedRow] = useState(null);
@@ -36,38 +36,83 @@ const AdjustInventory = () => {
     fetchInventoryData();
   }, []);
 
-  // Search Functionality
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page on search
-  };
-
-  // Filtered data by Warehouse ID
-  const filteredData = inventoryData.filter(
-    (item) =>
-      item.warehouseId.toLowerCase().includes(searchTerm.toLowerCase())
+  // Columns definition
+  const columns = useMemo(
+    () => [
+      { Header: 'SKU ID', accessor: 'skuId' },
+      { Header: 'Warehouse ID', accessor: 'warehouseId' },
+      { Header: 'Available Quantity', accessor: 'availableQuantity' },
+      {
+        Header: 'Action',
+        Cell: ({ row }) => (
+          <Button
+            variant="success"
+            onClick={() => handleAddQuantity(row.original)}
+            style={{
+              height: '36px',
+              textAlign: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+              display: 'flex',
+            }}
+          >
+            Add Quantity
+          </Button>
+        ),
+      },
+    ],
+    []
   );
 
-  // Sorting Functionality
-  const handleSort = (field) => {
-    const order = sortOrder.field === field && sortOrder.order === 'asc' ? 'desc' : 'asc';
-    setSortOrder({ field, order });
-    const sortedData = [...inventoryData].sort((a, b) => {
-      if (a[field] < b[field]) return order === 'asc' ? -1 : 1;
-      if (a[field] > b[field]) return order === 'asc' ? 1 : -1;
-      return 0;
-    });
-    setInventoryData(sortedData);
+  // Filter data based on search term
+  const filteredData = useMemo(
+    () =>
+      inventoryData.filter((item) =>
+        item.warehouseId.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [inventoryData, searchTerm]
+  );
+
+  // Table setup using react-table hooks
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    gotoPage,
+    nextPage,
+    previousPage,
+    state: { pageIndex },
+  } = useTable(
+    {
+      columns,
+      data: filteredData,
+      initialState: { pageIndex: 0, pageSize: 11 }, // Show 11 rows per page
+    },
+    useSortBy,
+    usePagination
+  );
+
+  // Update page numbers dynamically
+  const handlePageChange = (action) => {
+    if (action === 'next' && canNextPage) {
+      nextPage();
+      setPageRange((prevRange) =>
+        prevRange.map((num) => num + 1)
+      );
+    } else if (action === 'previous' && canPreviousPage) {
+      previousPage();
+      // Ensure that the page numbers do not go below 1
+      setPageRange((prevRange) => {
+        const newRange = prevRange.map((num) => (num - 1 >= 1 ? num - 1 : num));
+        return newRange[0] === 1 ? [1, 2, 3] : newRange;
+      });
+    }
   };
-
-  // Pagination Logic
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Handle modal
   const handleAddQuantity = (row) => {
@@ -118,89 +163,108 @@ const AdjustInventory = () => {
 
   return (
     <Container fluid className="p-4">
-      <h3 className="mt-3 mb-3">Inventory Management</h3>
       <Row className="mb-4">
-        <Col md={4} className="search-col">
-          <InputGroup>
+        <Col md={4} className="custom-input-group">
+          <InputGroup style={{ border: '0px solid #dedede', borderRadius: '9px 9px' }}>
             <FormControl
               placeholder="Search by Warehouse ID"
               value={searchTerm}
-              onChange={handleSearchChange}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="custom-input"
             />
-            <Button variant="outline-secondary" onClick={() => console.log('Search term:', searchTerm)}>
+            <Button
+              className="bg-secondary text-white btn btn-light"
+              onClick={() => console.log('Search term:', searchTerm)}
+            >
               Search
             </Button>
           </InputGroup>
         </Col>
       </Row>
 
-      <Table striped bordered hover className="inventory-table">
+      <Table bordered hover className="inventory-table" {...getTableProps()}>
         <thead>
-          <tr>
-            <th onClick={() => handleSort('skuId')} className="sortable">
-              SKU ID {sortOrder.field === 'skuId' && (sortOrder.order === 'asc' ? '🔼' : '🔽')}
-            </th>
-            <th onClick={() => handleSort('warehouseId')} className="sortable">
-              Warehouse ID {sortOrder.field === 'warehouseId' && (sortOrder.order === 'asc' ? '🔼' : '🔽')}
-            </th>
-            <th onClick={() => handleSort('availableQuantity')} className="sortable">
-              Available Quantity {sortOrder.field === 'availableQuantity' && (sortOrder.order === 'asc' ? '🔼' : '🔽')}
-            </th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.map((item, index) => (
-            <tr key={index} className="inventory-row">
-              <td>{item.skuId}</td>
-              <td>{item.warehouseId}</td>
-              <td>{item.availableQuantity}</td>
-              <td>
-                <Button variant="success" onClick={() => handleAddQuantity(item)}>
-                  Add Quantity
-                </Button>
-              </td>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render('Header')}
+                  {column.isSorted
+                    ? column.isSortedDesc
+                      ? ' 🔽'
+                      : ' 🔼'
+                    : ''}
+                </th>
+              ))}
             </tr>
           ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {page.map((row) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell) => (
+                  <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                ))}
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
 
-      {/* Pagination Controls */}
-      <div className="pagination">
-        <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1}>
-          {'<<'}
-        </button>
-        <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
-          {'<'}
-        </button>
-        <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
-          {'>'}
-        </button>
-        <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages}>
-          {'>>'}
-        </button>
-        <span>
-          Page <strong>{currentPage} of {totalPages}</strong>
-        </span>
-        <span>
-          | Go to page:
-          <input
-            type="number"
-            value={currentPage}
-            onChange={(e) => setCurrentPage(Number(e.target.value))}
-            style={{ width: '100px' }}
-            min="1"
-            max={totalPages}
-          />
-        </span>
-      </div>
+      {/* Updated Pagination Controls */}
+      <nav aria-label="Page navigation example">
+        <ul className="pagination justify-content-center">
+          <li className={`page-item ${!canPreviousPage ? 'disabled' : ''}`}>
+            <button
+              className="page-link"
+              style={{ color: '#dd1e25' }}
+              onClick={() => handlePageChange('previous')}
+              disabled={!canPreviousPage}
+            >
+              Previous
+            </button>
+          </li>
+          {pageRange.map((num) => (
+            <li key={num} className={`page-item ${pageIndex + 1 === num ? 'active' : ''}`}>
+              <button
+                className={`page-link ${pageIndex + 1 === num ? 'active-page' : ''}`}
+                onClick={() => gotoPage(num - 1)}
+              >
+                {num}
+              </button>
+            </li>
+          ))}
+          <li className={`page-item ${!canNextPage ? 'disabled' : ''}`}>
+            <button
+              className="page-link"
+              style={{ color: '#dd1e25' }}
+              onClick={() => handlePageChange('next')}
+              disabled={!canNextPage}
+            >
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
 
-      {/* Modal for adding quantity */}
+      {/* Quantity Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Add Quantity</Modal.Title>
         </Modal.Header>
+        {/* <Modal.Body>
+          <InputGroup className="mb-3">
+            <FormControl
+              type="number"
+              placeholder="Enter quantity to add"
+              value={quantityToAdd}
+              onChange={(e) => setQuantityToAdd(e.target.value)}
+            />
+          </InputGroup>
+          {validationMessage && <Alert variant="danger">{validationMessage}</Alert>}
+        </Modal.Body> */}
         <Modal.Body>
           <p>SKU ID: {selectedRow?.skuId}</p>
           <p>Warehouse ID: {selectedRow?.warehouseId}</p>
@@ -226,7 +290,7 @@ const AdjustInventory = () => {
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSaveQuantity}>
+          <Button variant="success" onClick={handleSaveQuantity}>
             Add
           </Button>
         </Modal.Footer>
@@ -236,8 +300,3 @@ const AdjustInventory = () => {
 };
 
 export default AdjustInventory;
-
-
-
-
-

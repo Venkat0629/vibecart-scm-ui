@@ -1,25 +1,25 @@
 .content-section {
     background: #efefef;
-    padding: 0; /* Remove any default padding */
-    margin: 0;  /* Remove any default margin */
+    padding: 0; 
+    margin: 0;  
 }
 
 .container {
-    max-width: 100%; /* Make sure container takes full width */
-    padding: 0;     /* Remove container padding */
+    max-width: 100%; 
+    padding: 0;     
 }
 
 .card-report, .card-pie, .card-table {
-    margin-bottom: 20px; /* Adjust spacing as needed */
+    margin-bottom: 20px;
 }
 
 .card-body {
     flex-grow: 1;
 }
 
-/* Ensuring equal height for cards */
+
 .card-report {
-    max-height: 200px; /* Adjust as needed */
+    max-height: 200px; 
     overflow: hidden;
 }
 
@@ -28,14 +28,14 @@
 }
 
 .card-pie {
-    min-height: 400px; /* Adjust as needed */
+    min-height: 400px; 
 }
 
 .card-table {
-    min-height: 400px; /* Adjust as needed */
+    min-height: 400px; 
 }
 
-/* Centering the pie chart */
+
 #orderPieChart {
     display: flex;
     justify-content: center;

@@ -7,12 +7,12 @@
     padding-right: 15px; */
     background-color: #fff;
     border-bottom: 1px solid #dedede;
-    border-top: 1px solid #dedede; /* Add border to the top of the header */
-    position: fixed; /* Make the header fixed */
+    border-top: 1px solid #dedede; 
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1000; /* Ensure it stays on top of other content */
+    z-index: 1000; 
 }
 
 .header-title {
@@ -39,7 +39,7 @@ h5 {
     text-align: center; 
 }
 .login-subtitle {
-    margin-right: 120px; /* Apply margin right only on login page */
+    margin-right: 120px; 
 }
 .header-actions {
     position: relative;
@@ -126,6 +126,9 @@ h5 {
     .header-subtitle h5 {
         font-size: 0.9rem;
     }
+}
+.user-icon{
+    cursor: pointer;
 }
 
 /* Body padding to avoid content hidden under the header */

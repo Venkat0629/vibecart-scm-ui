@@ -1,8 +1,5 @@
 /* Container styling */
-.container {
-  padding: 20px;
-  background-color: #f8f9fa; /* Light background color for better contrast */
-}
+/*  */
 
 /* Table styling */
 .table {
@@ -39,49 +36,34 @@
 .search-input {
   padding: 8px;
   font-size: 16px;
-  border: 1px solid #ced4da; /* Border color for input */
+   /* Border color for input */
   border-radius: 4px; /* Rounded corners */
 }
 
 /* Pagination styling */
+
+/* Example CSS Adjustments */
 .pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
+  margin-top: 10px; /* Space between pagination and footer */
 }
 
-.pagination button {
-  background-color: red; /* Red background color for pagination buttons */
-  color: white; /* White text color */
+.table-header {
+  text-align: center; 
+}
+
+.pagination .page-link {
+  color: #dd1e25;
   border: none;
-  padding: 8px 12px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 4px; /* Rounded corners */
+  outline: none;
 }
 
-.pagination button:disabled {
-  background-color: #ccc; /* Gray background for disabled buttons */
-  cursor: not-allowed; /* Not-allowed cursor for disabled buttons */
+.pagination .page-link:hover {
+  text-decoration: underline;
 }
 
-.pagination span {
-  margin: 0 10px;
-}
-
-.pagination input[type="number"] {
-  width: 80px;
-  padding: 5px;
-  font-size: 16px;
-  border: 1px solid #ced4da; /* Border color for input */
-  border-radius: 4px; /* Rounded corners */
-}
-
-.pagination select {
-  padding: 5px;
-  font-size: 16px;
-  border: 1px solid #ced4da; /* Border color for select */
-  border-radius: 4px; /* Rounded corners */
+.pagination .active .page-link {
+  text-decoration: underline;
+  color: #dd1e25;
+  background-color: white; 
+  border: none;
 }

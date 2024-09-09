@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Card, Table } from 'react-bootstrap';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { login } from '../ReduxToolkit/AuthSlice';
-import './login.css'; 
-import API_URLS from '../config'; 
+import './login.css';
+import API_URLS from '../config';
+import Swal from "sweetalert2"
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -18,7 +20,7 @@ const Login = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name,value)
+    console.log(name, value)
 
     setFormData((prevData) => ({
       ...prevData,
@@ -55,26 +57,37 @@ const Login = () => {
           role: formData.role
         });
 
-        const token = response.data.message; 
+        const token = response.data.message;
         const { email } = formData;
-        localStorage.setItem('token', token); 
-        localStorage.setItem('email', email); 
-        dispatch(login()); 
+        localStorage.setItem('token', token);
+        localStorage.setItem('email', email);
+        dispatch(login());
+        Swal.fire({
+          icon: 'success',
+          title: 'Login Successful',
+          text: 'You have been logged in successfully!',
+          showConfirmButton: false,
+          timer: 2000,
+        });
         navigate('/dashboard');
       } catch (error) {
         setErrors((prevErrors) => ({
           ...prevErrors,
           auth: 'Invalid email or password',
         }));
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Failed',
+          text: 'Invalid email or password. Please try again.',
+        });
       }
     }
   };
 
   return (
     <div className="login-container">
-      
-      <div className="login-card">
-        <h2 className="login-title">Login</h2>
+      <div className="login-card h-100 border">
+        <h2 className="login-title">Login</h2>       
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email" className="form-label">Email ID</label>
@@ -100,18 +113,7 @@ const Login = () => {
             />
             {errors.password && <div className="error-message">{errors.password}</div>}
           </div>
-          <div className="form-group">
-            <label htmlFor="role" className="form-label">User Role</label>
-            <select
-              id="role"
-              name="role"
-              className="form-select"
-              onChange={handleChange}
-            >
-              <option value="ADMIN">ADMIN</option>
-              <option value="MASTER">MASTER</option>
-            </select>
-          </div>
+          
           <button type="submit" className="login-button">Login</button>
           {errors.auth && <div className="error-message">{errors.auth}</div>}
         </form>

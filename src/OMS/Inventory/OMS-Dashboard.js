@@ -138,37 +138,38 @@ const Dashboard = () => {
 
     return (
         <div className='content-section'>
-            <Container>
+            <Container className='mt-4'>
                 <Row>
                     <Col md={6} className="d-flex flex-column">
                         <Card className='text-center mb-4 card-report'>
                             <Card.Header>
-                                <Card.Title>Orders Report</Card.Title>
+                                <Card.Title className='mb-0'>Orders Report</Card.Title>
                             </Card.Header>
                             <Card.Body>
-                                <div className="d-flex justify-content-around">
-                                    <div>
+                                <div className="row text-center">
+                                    <div className="col-3 border-end">
                                         <h2>{totalOrders}</h2>
                                         <p>Total Orders</p>
                                     </div>
-                                    <div>
+                                    <div className="col-3 border-end">
                                         <h2>{processedOrders}</h2>
                                         <p>Orders in Process</p>
                                     </div>
-                                    <div>
+                                    <div className="col-3 border-end">
                                         <h2>{completedOrders}</h2>
                                         <p>Completed Orders</p>
                                     </div>
-                                    <div>
+                                    <div className="col-3">
                                         <h2>{cancelledOrdersCount}</h2>
                                         <p>Cancelled Orders</p>
                                     </div>
                                 </div>
                             </Card.Body>
+
                         </Card>
                         <Card className='text-center flex-grow-1 card-pie'>
                             <Card.Header>
-                                <Card.Title>Order Status Distribution</Card.Title>
+                                <Card.Title className='mb-0'>Order Status Distribution</Card.Title>
                             </Card.Header>
                             <Card.Body>
                                 <div id="orderPieChart" style={{ width: "100%", height: "100%" }}></div>
@@ -178,23 +179,23 @@ const Dashboard = () => {
                     <Col md={6} className="d-flex flex-column">
                         <Card className='text-center mb-4 card-report'>
                             <Card.Header>
-                                <Card.Title>Inventory Report</Card.Title>
+                                <Card.Title className='mb-0'>Inventory Report</Card.Title>
                             </Card.Header>
                             <Card.Body>
-                                <div className="d-flex justify-content-around">
-                                    <div>
+                                <div className="row text-center">
+                                    <div className="col-3 border-end">
                                         <h2>{inventoryData.length}</h2>
                                         <p>Total Warehouses</p>
                                     </div>
-                                    <div>
+                                    <div className="col-3 border-end">
                                         <h2>{inventoryData.reduce((acc, item) => acc + item.availableQuantity, 0)}</h2>
                                         <p>Available Quantity</p>
                                     </div>
-                                    <div>
+                                    <div className="col-3 border-end">
                                         <h2>{inventoryData.reduce((acc, item) => acc + item.reservedQuantity, 0)}</h2>
                                         <p>Reserved Quantity</p>
                                     </div>
-                                    <div>
+                                    <div className="col-3">
                                         <h2>{inventoryData.reduce((acc, item) => acc + (item.availableQuantity + item.reservedQuantity), 0)}</h2>
                                         <p>Total Quantity</p>
                                     </div>
@@ -203,7 +204,7 @@ const Dashboard = () => {
                         </Card>
                         <Card className='text-center flex-grow-1 card-table'>
                             <Card.Header>
-                                <Card.Title>Inventory Details</Card.Title>
+                                <Card.Title className='mb-0'>Inventory Details</Card.Title>
                             </Card.Header>
                             <Card.Body className="d-flex flex-column">
                                 <Table bordered hover>

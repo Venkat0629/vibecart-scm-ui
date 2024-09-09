@@ -7,7 +7,7 @@
 }
 
 .inventory-row {
-  height: 30px; /* Adjust the height as needed */
+  height: 30px; 
 }
 
 .search-col {
@@ -19,16 +19,28 @@
 }
 
 .pagination {
-  margin-top: 20px;
+  margin-top: 10px; 
+}
+
+.table-header {
   text-align: center;
 }
 
-.pagination button {
-  margin: 0 5px;
+.pagination .page-link {
+  color: #dd1e25;
+  border: none;
+  outline: none;
 }
 
-.pagination input {
-  width: 50px;
+.pagination .page-link:hover {
+  text-decoration: underline;
+}
+
+.pagination .active .page-link {
+  text-decoration: underline;
+  color: #dd1e25;
+  background-color: white; 
+  border: none; 
 }
 
 .inventory-table th, .inventory-table td {

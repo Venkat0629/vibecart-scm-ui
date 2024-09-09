@@ -25,3 +25,22 @@
   }
    */
    /* Remove hover animation and add background color on hover */
+   .custom-table {
+    border: 2px solid #dedede;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .custom-table thead {
+    background-color: #343a40; /* Dark background for the header */
+    color: #ffffff; /* White text color for the header */
+  }
+  
+  .custom-table th, .custom-table td {
+    padding: 12px; /* Increase row height */
+  }
+  
+  .custom-table tbody tr {
+    height: 50px; /* Adjust row height as needed */
+  }
+  

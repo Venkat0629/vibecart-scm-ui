@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import './index.css'
 import { useSelector, useDispatch } from 'react-redux';
@@ -26,10 +25,10 @@ function App() {
 
         <div style={{display:"flex",flexDirection:"column",minHeight:"100vh"}}>
         <Header onLogout={handleLogout} isLoggedIn={isLoggedIn} />
-        <div style={{overflow:"auto",flex:1, height:"100vh"}}>
+        <div style={{overflow:"hidden",flex:1, height:"100vh"}}>
           {isLoggedIn ? (
             <div className="row">                       
-              <div className="col-2 sidebar_parent">
+              <div className="col-2 sidebar_parent" style={{height:"100vh"}}>
                 <Sidebar />
               </div>
               <div className="col-10 dashboard_parent">
