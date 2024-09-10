@@ -1,187 +1,243 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useTable, usePagination, useSortBy } from 'react-table';
-import { Button, FormControl, InputGroup, Row, Col } from 'react-bootstrap';
-import axios from 'axios';
-import API_URLS from '../config';
-import './Styling/inv_console.css'; // Ensure this path is correct
+import React, { useState, useEffect, useMemo } from 'react';
+import { Container, Row, Col, Button, Table, InputGroup, FormControl, Alert } from 'react-bootstrap';
+import './Styling/inv_location.css';
+import ClipLoader from 'react-spinners/ClipLoader'; // Loader
+import API_URLS from "../config";
 
-const InventoryConsole = () => {
-  const [data, setData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [pageRange, setPageRange] = useState([1, 2, 3]); // State for dynamic page numbers
+const InventoryLocation = () => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(11); // Show 11 rows per page
+    const [loading, setLoading] = useState(true); // Loader state true initially
+    const [inventoryData, setInventoryData] = useState([]);
+    const [error, setError] = useState('');
+    const [sortConfig, setSortConfig] = useState({ key: 'skuId', direction: 'asc' });
+  
+    // Define state variables for pagination logic
+    const totalPages = Math.ceil(inventoryData.length / itemsPerPage);
+    
+    const canPreviousPage = currentPage > 1;
+    const canNextPage = currentPage < totalPages;
 
-  // Fetch data from API using axios
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(API_URLS.getAllInventories);
-        const result = response.data;
-
-        if (result.success) {
-          const transformedData = result.data.map(item => ({
-            skuId: item.skuId,
-            availableQty: item.availableQuantity,
-            reservedQty: item.reservedQuantity,
-            totalQty: item.totalQuantity,
-          }));
-          setData(transformedData);
-        } else {
-          console.error('Failed to fetch data:', result.message);
+    const gotoPage = (page) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
         }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
     };
 
-    fetchData();
-  }, []);
+    const handlePageChange = (action) => {
+        if (action === 'next' && canNextPage) {
+            gotoPage(currentPage + 1);
+        } else if (action === 'previous' && canPreviousPage) {
+            gotoPage(currentPage - 1);
+        }
+    };
 
-  // Columns definition
-  const columns = useMemo(
-    () => [
-      { Header: 'SKU ID', accessor: 'skuId' },
-      { Header: 'Available Quantity', accessor: 'availableQty' },
-      { Header: 'Reserved Quantity', accessor: 'reservedQty' },
-      { Header: 'Total Quantity', accessor: 'totalQty' },
-    ],
-    []
-  );
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch(API_URLS.getAllWarehouses);
+                const result = await response.json();
+                if (result.success) {
+                    setInventoryData(result.data);
+                } else {
+                    setError('Failed to fetch data');
+                }
+            } catch (err) {
+                setError('Error occurred while fetching data');
+            } finally {
+                setLoading(false);
+            }
+        };
+       
+        fetchData();
+    }, []);
+ 
+    const sortedData = useMemo(() => {
+        let sortableItems = [...inventoryData];
+        if (sortConfig !== null) {
+            sortableItems.sort((a, b) => {
+                if (a[sortConfig.key] < b[sortConfig.key]) {
+                    return sortConfig.direction === 'asc' ? -1 : 1;
+                }
+                if (a[sortConfig.key] > b[sortConfig.key]) {
+                    return sortConfig.direction === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+        }
+        return sortableItems;
+    }, [inventoryData, sortConfig]);
+ 
+    const filteredData = useMemo(
+        () => sortedData.filter(item =>
+            item.skuId.toString().includes(searchTerm.toLowerCase()) ||
+            item.warehouseId.toLowerCase().includes(searchTerm.toLowerCase())
+        ),
+        [searchTerm, sortedData]
+    );
 
-  // Filter data based on search term
-  const filteredData = useMemo(
-    () =>
-      data.filter(item =>
-        item.skuId.toString().toLowerCase().includes(searchTerm.toLowerCase())
-      ),
-    [data, searchTerm]
-  );
+    // Get the current paginated data
+    const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  // Table setup using react-table hooks
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    prepareRow,
-    page,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    gotoPage,
-    nextPage,
-    previousPage,
-    state: { pageIndex },
-  } = useTable(
-    {
-      columns,
-      data: filteredData,
-      initialState: { pageIndex: 0, pageSize: 11 }, // Show 11 rows per page
-    },
-    useSortBy,
-    usePagination
-  );
+    const handleSort = (key) => {
+        let direction = 'asc';
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
+    };
 
-  // Update page numbers dynamically
-  const handlePageChange = (action) => {
-    if (action === 'next' && canNextPage) {
-      nextPage();
-      setPageRange((prevRange) => {
-        const newStart = Math.min(prevRange[0] + 1, pageOptions.length - 2);
-        return [newStart, newStart + 1, newStart + 2];
-      });
-    } else if (action === 'previous' && canPreviousPage) {
-      previousPage();
-      setPageRange((prevRange) => {
-        const newStart = Math.max(prevRange[0] - 1, 1);
-        return [newStart, newStart + 1, newStart + 2];
-      });
-    }
-  };
+    // Create dynamic page numbers around the current page
+    const getPageRange = () => {
+        const range = [];
+        const maxVisiblePages = 4;
+        let start = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let end = Math.min(totalPages, start + maxVisiblePages - 1);
+        if (end - start < maxVisiblePages - 1) {
+            start = Math.max(1, end - maxVisiblePages + 1);
+        }
+        for (let i = start; i <= end; i++) {
+            range.push(i);
+        }
+        return range;
+    };
 
-  return (
-    <div fluid className="mt-3" style={{ marginBottom: '150px' }}> {/* Adjust height above footer */}
-      <Row className="mb-4">
-        <Col md={4} className="custom-input-group">
-          <InputGroup style={{ border: "0px solid #dedede", borderRadius: "9px 9px" }}>
-            <FormControl
-              placeholder="Search by SKU ID"
-              aria-label="Search by SKU ID"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="custom-input"
-            />
-            <Button className='bg-secondary text-white btn btn-light' onClick={() => console.log('Search term:', searchTerm)}>
-              Search
-            </Button>
-          </InputGroup>
-        </Col>
-      </Row>
+    const pageRange = getPageRange();
 
-      <table {...getTableProps()} className="table table-bordered table-hover">
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()} className="table-header">
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render('Header')}
-                  <span>
-                    {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                  </span>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => (
-                  <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                ))}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+    return (
+        <Container fluid className="mt-4">
+            <Row className="h-100">
+                <Col md={12} className="d-flex flex-column h-100">
+                    {/* Search Input */}
+                    <Row className="mb-4">
+                        <Col md={4} className="custom-input-group">
+                            <InputGroup>
+                                <FormControl
+                                    placeholder="Search by SKU or Warehouse ID"
+                                    aria-label="Search by SKU or Warehouse ID"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="custom-input"
+                                />
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => console.log('Search term:', searchTerm)}
+                                >
+                                    Search
+                                </Button>
+                            </InputGroup>
+                        </Col>
+                    </Row>
 
-      {/* Updated Pagination Controls */}
-      <nav aria-label="Page navigation example">
-        <ul className="pagination justify-content-center">
-          <li className={`page-item ${!canPreviousPage ? 'disabled' : ''}`}>
-            <button
-              className="page-link"
-              style={{ color: '#dd1e25' }}
-              onClick={() => handlePageChange('previous')}
-              disabled={!canPreviousPage}
-            >
-              Previous
-            </button>
-          </li>
-          {pageRange.map((num) => (
-            <li key={num} className={`page-item ${pageIndex + 1 === num ? 'active' : ''}`}>
-              <button
-                className={`page-link ${pageIndex + 1 === num ? 'active-page' : ''}`}
-                onClick={() => gotoPage(num - 1)}
-              >
-                {num}
-              </button>
-            </li>
-          ))}
-          <li className={`page-item ${!canNextPage ? 'disabled' : ''}`}>
-            <button
-              className="page-link"
-              style={{ color: '#dd1e25' }}
-              onClick={() => handlePageChange('next')}
-              disabled={!canNextPage}
-            >
-              Next
-            </button>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  );
+                    {/* Loader or Error Display */}
+                    {loading ? (
+                        <Row className="justify-content-center align-items-center flex-grow-1" style={{ height: '100%' }}>
+                            <Col className="text-center">
+                                <ClipLoader color="#007bff" size={50} />
+                                <div className="mt-2">Loading data...</div>
+                            </Col>
+                        </Row>
+                    ) : error ? (
+                        <Row className="justify-content-center align-items-center flex-grow-1" style={{ height: '100%' }}>
+                            <Col className="text-center">
+                                <Alert variant="danger">{error}</Alert>
+                            </Col>
+                        </Row>
+                    ) : (
+                        <>
+                            <div className="table-wrapper flex-grow-1">
+                                <Row>
+                                    <Col>
+                                        {/* Inventory Table */}
+                                        <div className='table-responsive'>
+                                            <Table bordered hover className='table'>
+                                                <thead>
+                                                    <tr>
+                                                        <th onClick={() => handleSort('skuId')}>
+                                                            SKU ID {sortConfig.key === 'skuId' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : null}
+                                                        </th>
+                                                        <th onClick={() => handleSort('warehouseId')}>
+                                                            Warehouse ID {sortConfig.key === 'warehouseId' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : null}
+                                                        </th>
+                                                        <th onClick={() => handleSort('availableQuantity')}>
+                                                            Available Quantity {sortConfig.key === 'availableQuantity' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : null}
+                                                        </th>
+                                                        <th onClick={() => handleSort('reservedQuantity')}>
+                                                            Reserved Quantity {sortConfig.key === 'reservedQuantity' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : null}
+                                                        </th>
+                                                        <th onClick={() => handleSort('totalQuantity')}>
+                                                            Total Quantity {sortConfig.key === 'totalQuantity' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : null}
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {paginatedData.length > 0 ? (
+                                                        paginatedData.map((item, index) => (
+                                                            <tr key={index}>
+                                                                <td>{item.skuId}</td>
+                                                                <td>{item.warehouseId}</td>
+                                                                <td>{item.availableQuantity}</td>
+                                                                <td>{item.reservedQuantity}</td>
+                                                                <td>{item.totalQuantity}</td>
+                                                            </tr>
+                                                        ))
+                                                    ) : (
+                                                        <tr>
+                                                            <td colSpan="5" className="text-center">
+                                                                No data found
+                                                            </td>
+                                                        </tr>
+                                                    )}
+                                                </tbody>
+                                            </Table>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                
+                                {/* Custom Pagination */}
+                                <nav aria-label="Page navigation example">
+                                    <ul className="pagination justify-content-center">
+                                        <li className={`page-item ${!canPreviousPage ? 'disabled' : ''}`}>
+                                            <button
+                                                className="page-link"
+                                                style={{ color: '#dd1e25' }}
+                                                onClick={() => handlePageChange('previous')}
+                                                disabled={!canPreviousPage}
+                                            >
+                                                Previous
+                                            </button>
+                                        </li>
+                                        {pageRange.map((num) => (
+                                            <li key={num} className={`page-item ${currentPage === num ? 'active' : ''}`}>
+                                                <button
+                                                    className={`page-link ${currentPage === num ? 'active-page' : ''}`}
+                                                    onClick={() => gotoPage(num)}
+                                                >
+                                                    {num}
+                                                </button>
+                                            </li>
+                                        ))}
+                                        <li className={`page-item ${!canNextPage ? 'disabled' : ''}`}>
+                                            <button
+                                                className="page-link"
+                                                style={{ color: '#dd1e25' }}
+                                                onClick={() => handlePageChange('next')}
+                                                disabled={!canNextPage}
+                                            >
+                                                Next
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </>
+                    )}
+                </Col>
+            </Row>
+        </Container>
+    );
 };
 
-export default InventoryConsole;
+export default InventoryLocation;
