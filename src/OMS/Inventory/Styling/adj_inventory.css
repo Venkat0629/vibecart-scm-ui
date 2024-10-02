@@ -1,0 +1,64 @@
+/* inv_console.css */
+
+.inventory-table {
+  margin-top: 20px;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.inventory-row {
+  height: 30px; 
+}
+
+.search-col {
+  margin-bottom: 20px;
+}
+
+.custom-input {
+  border-radius: 0;
+}
+
+.pagination {
+  margin-top: 10px; 
+}
+
+.table-header {
+  text-align: center;
+}
+
+.pagination .page-link {
+  color: #dd1e25;
+  border: none;
+  outline: none;
+}
+
+.pagination .page-link:hover {
+  text-decoration: underline;
+}
+
+.pagination .active .page-link {
+  text-decoration: underline;
+  color: #dd1e25;
+  background-color: white; 
+  border: none; 
+}
+
+.inventory-table th, .inventory-table td {
+  padding: 8px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.inventory-table thead th {
+  cursor: pointer;
+}
+
+.inventory-table tbody tr {
+  cursor: pointer;
+}
+
+.inventory-table tbody td {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

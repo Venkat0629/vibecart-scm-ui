@@ -1,0 +1,38 @@
+
+.sidebar-btn {
+    background-color: transparent;
+    color: #000;
+    border: none; 
+    width: 105%;
+    text-align: left;
+    padding: 10px; 
+    margin: 10px 0; 
+    outline: none; 
+    margin-right: 10px;
+    
+}
+
+.sidebar-btn.active {
+    background-color: rgba(0, 0, 0, 0.05); 
+    font-weight: bold; 
+}
+
+
+
+
+@media screen and (max-width: 768px) {
+    .sidebar-btn {
+        display: block; 
+        
+        text-align: left;
+        width: calc(100% - o.01px);
+        margin: 13px;
+        padding: 10px 15px;
+        font-size: 14px; 
+        font-weight: normal;
+    }
+
+    .sidebar-btn.active {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+}

@@ -1,0 +1,137 @@
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    /* padding-left: 15px;
+    padding-right: 15px; */
+    background-color: #fff;
+    border-bottom: 1px solid #dedede;
+    border-top: 1px solid #dedede; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; 
+}
+
+.header-title {
+    font-size: 1.6em;
+    color: #dd1e25;
+    display: flex;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.header-subtitle {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center !important;
+    align-items: center;
+    margin-right: 120px;
+    width: 100%;
+}
+
+h5 {
+    margin: 0;
+    text-align: center; 
+}
+.login-subtitle {
+    margin-right: 120px; 
+}
+.header-actions {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    min-width: 150px;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-header {
+    font-weight: bold;
+    padding: 8px 10px;
+    border-bottom: 1px solid #ddd;
+    background-color: #f8f9fa;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+.dropdown-item:hover {
+    background-color: #f4f4f4;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: row;
+        padding: 10px;
+    }
+
+    .header-title {
+        font-size: 1.2em;
+        margin-bottom: 5px;
+    }
+
+    .header-subtitle {
+        order: 1;
+        text-align: center;
+        flex-grow: 1;
+    }
+
+    h5 {
+        font-size: 1rem;
+        font-weight: 400;
+        margin: 0;
+    }
+
+    .header-actions {
+        margin-top: 0;
+        order: 2;
+    }
+
+    .user-info {
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-title {
+        font-size: 1em;
+        order: 0;
+        flex-grow: 0;
+    }
+
+    .header-subtitle h5 {
+        font-size: 0.9rem;
+    }
+}
+.user-icon{
+    cursor: pointer;
+}
+
+/* Body padding to avoid content hidden under the header */
+body {
+    padding-top: 60px; /* Adjust padding to match the height of the fixed header */
+}
