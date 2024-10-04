@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { login } from '../ReduxToolkit/AuthSlice';
 import './login.css';
-import API_URLS from '../config';
+import { API_URLS } from '../config';
 import Swal from "sweetalert2"
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -87,7 +87,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-card h-100 border">
-        <h2 className="login-title">Login</h2>       
+        <h2 className="login-title">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email" className="form-label">Email ID</label>
@@ -113,7 +113,7 @@ const Login = () => {
             />
             {errors.password && <div className="error-message">{errors.password}</div>}
           </div>
-          
+
           <button type="submit" className="login-button">Login</button>
           {/* {errors.auth && <div className="error-message">{errors.auth}</div>} */}
         </form>

@@ -4,7 +4,7 @@ import { Container, Row, Col, Table, Button, Modal, FormControl, InputGroup, Ale
 import Swal from 'sweetalert2';
 import './Styling/inv_console.css'; // Ensure this path is correct
 import "../config";
-import API_URLS from '../config';
+import { API_URLS } from '../config';
 
 const AdjustInventory = () => {
   const [inventoryData, setInventoryData] = useState([]);
@@ -82,7 +82,7 @@ const AdjustInventory = () => {
     page,
     canPreviousPage,
     canNextPage,
-    
+
     gotoPage,
     nextPage,
     previousPage,

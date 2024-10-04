@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchInventoryData = createAsyncThunk(
   'inventory/fetchInventoryData',
   async () => {
-    const response = await fetch('http://10.3.45.15:4001/vibe-cart/inventory/inventory-report');
+    const response = await fetch('VIBECART_URI/vibe-cart/inventory/inventory-report');
     const data = await response.json();
     return data.data || [];  // Ensure we return an array or empty array if data is undefined
   }

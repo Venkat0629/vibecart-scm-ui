@@ -1,10 +1,12 @@
+/* eslint-disable testing-library/no-wait-for-multiple-assertions */
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import Dashboard from '../Inventory/OMS-Dashboard';
+import { API_URLS } from '../config';
 
 // Mock the global fetch API
 global.fetch = jest.fn((url) => {
-  if (url === 'http://10.3.45.15:4001/vibe-cart/orders/getAllOrders') {
+  if (url === API_URLS.getAllOrders) {
     return Promise.resolve({
       ok: true,
       json: () =>
@@ -19,7 +21,7 @@ global.fetch = jest.fn((url) => {
     });
   }
   
-  if (url === 'http://10.3.45.15:4001/vibe-cart/inventory/get-all-inventories') {
+  if (url === API_URLS.getAllInventories) {
     return Promise.resolve({
       ok: true,
       json: () =>
@@ -43,11 +45,12 @@ describe('Dashboard Component', () => {
     render(<Dashboard />);
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('http://10.3.45.15:4001/vibe-cart/orders/getAllOrders', {
+      expect(global.fetch).toHaveBeenCalledWith(API_URLS.getAllOrders, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
       // Adjust to the number of calls your component makes
+      // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
       expect(global.fetch).toHaveBeenCalledTimes(2);
     });
   });
@@ -56,7 +59,7 @@ describe('Dashboard Component', () => {
     render(<Dashboard />);
 
     await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalledWith('http://10.3.45.15:4001/vibe-cart/inventory/get-all-inventories', {
+        expect(global.fetch).toHaveBeenCalledWith(API_URLS.getAllInventories, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });

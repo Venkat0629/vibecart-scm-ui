@@ -4,6 +4,8 @@ import { fetchOrders } from '../ReduxToolkit/OrderSlice';
 import axios from 'axios';
 import { Container, Row, Col, Table, InputGroup, FormControl, Button, Modal } from 'react-bootstrap';
 import "./orderconsole.css"
+import { API_URLS } from "../config"
+
 const OrderConsole = () => {
   const dispatch = useDispatch();
   const orderData = useSelector((state) => state.orders.orderData);
@@ -29,7 +31,7 @@ const OrderConsole = () => {
   const handleShowDetails = async (orderId) => {
     try {
       // Fetch order details from the API
-      const response = await axios.get(`http://10.3.45.15:4001/vibe-cart/scm/orders/getOrderById/${orderId}`);
+      const response = await axios.get(API_URLS.getOrderById(orderId));
       const orderDetails = response.data.data;
       setSelectedOrder(orderDetails);
       setShowModal(true);

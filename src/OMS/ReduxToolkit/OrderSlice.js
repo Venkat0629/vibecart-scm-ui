@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import API_URLS from '../config';
+import { API_URLS } from '../config';
 
 // Fetch orders
 export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
@@ -8,15 +8,15 @@ export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
   const orders = response.data.data || [];
   return orders.map((order) => ({
     orderId: order.orderId || '',
-    skuId: order.orderItems?.[0]?.itemId || '',  
+    skuId: order.orderItems?.[0]?.itemId || '',
     productName: order.orderItems?.[0]?.itemName || '',
-    size: '', 
+    size: '',
     color: '',
     quantity: order.totalQuantity || 0,
     unitPrice: order.orderItems?.[0]?.unitPrice || 0,
     totalPrice: order.totalAmount || 0,
-    couponUsed: '', 
-    discountedPrice: '', 
+    couponUsed: '',
+    discountedPrice: '',
     paymentMethod: order.paymentMethod || '',
     payablePrice: order.totalAmount || 0,
     name: order.customer?.customerName || '',
@@ -27,7 +27,7 @@ export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
     state: order.shippingAddress?.state || '',
     pincode: order.shippingAddress?.zipcode || '',
     orderStatus: order.orderStatus || '',
-    selected: false, 
+    selected: false,
   }));
 });
 
@@ -36,7 +36,7 @@ export const cancelOrder = createAsyncThunk(
   'orders/cancelOrder',
   async (orderId) => {
     await axios.delete(API_URLS.cancelOrder(orderId));
-    return orderId;  
+    return orderId;
   }
 );
 

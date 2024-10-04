@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTable, usePagination, useSortBy } from 'react-table';
 import { Button, FormControl, InputGroup, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
-import API_URLS from '../config';
+import {API_URLS} from '../config';
 import './Styling/inv_console.css'; // Ensure this path is correct
 
 const InventoryConsole = () => {

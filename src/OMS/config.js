@@ -1,18 +1,15 @@
-const API_URLS = {
-    getAllWarehouses: 'http://10.3.45.15:4001/vibe-cart/scm/inventory/get-all-warehouses',
-    getAllInventories: 'http://10.3.45.15:4001/vibe-cart/scm/inventory/get-all-inventories',
-    inventoryReport: 'http://10.3.45.15:4001/vibe-cart/scm/inventory/inventory-report',
-    updateSingleInventory: 'http://10.3.45.15:4001/vibe-cart/scm/inventory/update-single-inventory',
+import { VIBECART_URI } from "./service";
 
-    getAllOrders: 'http://10.3.45.15:4001/vibe-cart/scm/orders/getAllOrders',
-    getOrderById:(orderId)=> `http://10.3.45.15:4001/vibe-cart/scm/orders/getOrderById/${orderId}`,
-    getInventoryReport: 'http://10.3.45.15:4001/vibe-cart/scm/inventory/inventory-report',
-    cancelOrder: (orderId) => `http://10.3.45.15:4001/vibe-cart/scm/orders/cancelOrder/${orderId}`,
+export const API_URLS = {
+  getAllWarehouses: `${VIBECART_URI}/api/v1/vibe-cart/scm/inventory/get-all-warehouses`,
+  getAllInventories: `${VIBECART_URI}/api/v1/vibe-cart/scm/inventory/get-all-inventories`,
+  inventoryReport: `${VIBECART_URI}/api/v1/vibe-cart/scm/inventory/inventory-report`,
+  updateSingleInventory: `${VIBECART_URI}/api/v1/vibe-cart/scm/inventory/update-single-inventory`,
+  getAllOrders: `${VIBECART_URI}/api/v1/vibe-cart/scm/orders/getAllOrders`,
+  getOrderById: (orderId) => `${VIBECART_URI}/api/v1/vibe-cart/scm/orders/getOrderById/${orderId}`,
+  getInventoryReport: `${VIBECART_URI}/api/v1/vibe-cart/scm/inventory/inventory-report`,
+  cancelOrder: (orderId) => `${VIBECART_URI}/api/v1/vibe-cart/scm/orders/cancelOrder/${orderId}`,
+  validateAccount: `${VIBECART_URI}/api/v1/vibe-cart/accounts/validate?type=user`,
+};
 
-    validateAccount: 'http://10.3.45.15:4001/api/v1/vibe-cart/accounts/validate?type=user',
 
-
-  };
-  
-  export default API_URLS;
-  

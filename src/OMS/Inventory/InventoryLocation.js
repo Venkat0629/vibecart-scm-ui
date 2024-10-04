@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Container, Row, Col, Button, Table, InputGroup, FormControl, Alert } from 'react-bootstrap';
 import './Styling/inv_location.css';
 import ClipLoader from 'react-spinners/ClipLoader'; // Loader
-import API_URLS from "../config";
+import { API_URLS } from "../config";
 
 const InventoryLocation = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -12,10 +12,10 @@ const InventoryLocation = () => {
     const [inventoryData, setInventoryData] = useState([]);
     const [error, setError] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'skuId', direction: 'asc' });
-  
+
     // Define state variables for pagination logic
     const totalPages = Math.ceil(inventoryData.length / itemsPerPage);
-    
+
     const canPreviousPage = currentPage > 1;
     const canNextPage = currentPage < totalPages;
 
@@ -50,10 +50,10 @@ const InventoryLocation = () => {
                 setLoading(false);
             }
         };
-       
+
         fetchData();
     }, []);
- 
+
     const sortedData = useMemo(() => {
         let sortableItems = [...inventoryData];
         if (sortConfig !== null) {
@@ -69,7 +69,7 @@ const InventoryLocation = () => {
         }
         return sortableItems;
     }, [inventoryData, sortConfig]);
- 
+
     const filteredData = useMemo(
         () => sortedData.filter(item =>
             item.skuId.toString().includes(searchTerm.toLowerCase()) ||
@@ -195,7 +195,7 @@ const InventoryLocation = () => {
                                         </div>
                                     </Col>
                                 </Row>
-                                
+
                                 {/* Custom Pagination */}
                                 <nav aria-label="Page navigation example">
                                     <ul className="pagination justify-content-center">
